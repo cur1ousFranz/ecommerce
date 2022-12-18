@@ -84,7 +84,7 @@
                 NEW ARRIVALS
             </h1>
             <div class="grid grid-cols-2 md:grid-cols-5">
-                <div class="hover:shadow-xl cursor-pointer mx-2 my-3">
+                <div class="shadow-md hover:shadow-xl cursor-pointer mx-2 my-3">
                     <img src="/img/1.webp" alt="">
                     <h1 class="text-lg font-semibold py-2 px-2" style="letter-spacing: 1px">$ 10.99</h1>
                 </div>

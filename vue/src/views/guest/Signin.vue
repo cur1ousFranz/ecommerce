@@ -24,15 +24,32 @@
                 </svg>
                 Sign In With Google
             </button>
-                            <p class="text-sm text-gray-600 text-center">Don't have an account yet?
-                    <router-link :to="{ name: 'Signup' }" class="text-blue-500">Sign Up</router-link>
-                </p>
+            <p class="text-sm text-gray-600 text-center">Don't have an account yet?
+                <router-link :to="{ name: 'Signup' }" class="text-blue-500">Sign Up</router-link>
+            </p>
         </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import store from '../../store';
+import { useRouter } from 'vue-router'
+
+  const router = useRouter()
+  if(localStorage.getItem('TOKEN')){
+    router.push({ name : 'LandingPage'})
+  }
+
+  const googleAuth = () => {
+      store.dispatch('googleAuthenticate')
+      .then((res) => {
+        console.log(res);
+      })
+      .catch(res => {
+          console.log(res);
+      })
+  }
 
 </script>
 

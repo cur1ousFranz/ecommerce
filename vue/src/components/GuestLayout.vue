@@ -5,11 +5,31 @@
             <img src="/img/nav-logo.png" class="w-36" alt="">
         </router-link>
         <div class="hidden space-x-3 relative md:flex">
-            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-cart3 mt-2" viewBox="0 0 16 16">
-            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-            </svg>
-            <router-link :to="{ name : 'Signin'}" class="px-3 py-2">Sign In</router-link>
+
+          <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-cart3 mt-2" viewBox="0 0 16 16">
+          <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+          </svg>
+          <!-- MENU -->
+          <div v-if="authenticated" class="relative inline-block text-left">
+            <div>
+              <span class="rounded-md shadow-sm">
+                <button @click="showDropdown" type="button" class="inline-flex justify-center w-full rounded-full border-gray-300 px-3 py-1 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition duration-150 ease-in-out">
+                   <img src="/img/profile-default.png" class="w-7" alt="">
+                </button>
+              </span>
+            </div>
+            <div v-if="show" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg">
+              <div class="rounded-md bg-white shadow-xs text-center">
+                <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                  <a href="#" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Profile</a>
+                  <a href="#" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Logout</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <router-link v-else :to="{ name : 'Signin'}" class="px-3 py-2">Sign In</router-link>
         </div>
+
         <div id="nav-icon1" class="md:hidden">
             <span></span>
             <span></span>
@@ -24,12 +44,21 @@
 </template>
 
 <script setup>
-    import Footer from './Footer.vue'
-    import { onMounted } from 'vue'
-    onMounted(() => {
-        let nav = document.querySelector('#nav-icon1')
-        nav.addEventListener('click', () => nav.classList.toggle('open'))
-    })
+import Footer from './Footer.vue'
+import { onMounted, ref } from 'vue'
+  const show = ref(false)
+  const authenticated = ref(false)
+  const showDropdown = () => {
+    show.value = !show.value
+  }
+
+  if(localStorage.getItem('TOKEN')){
+    authenticated.value = true
+  }
+  onMounted(() => {
+      let nav = document.querySelector('#nav-icon1')
+      nav.addEventListener('click', () => nav.classList.toggle('open'))
+  })
 
 </script>
 

@@ -31,4 +31,11 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'google' => [
+        'client_id' => '974321798171-mp9em4g66nlardgtk4a01jp741h7nfhb.apps.googleusercontent.com',
+        'client_secret' => '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',
+        'redirect' => 'https://ab23-2001-4456-168-b000-2d9b-2f96-f332-91e5.ap.ngrok.io/api/auth/google/callback',
+    ],
+
+
 ];
