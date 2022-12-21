@@ -46,19 +46,24 @@
 <script setup>
 import Footer from './Footer.vue'
 import { onMounted, ref } from 'vue'
+import store from '../store'
   const show = ref(false)
   const authenticated = ref(false)
   const showDropdown = () => {
     show.value = !show.value
   }
 
+  onMounted(async () => {
+    let nav = document.querySelector('#nav-icon1')
+    nav.addEventListener('click', () => nav.classList.toggle('open'))
+
+    const data = await store.dispatch('isUserAuth')
+    console.log(data);
+  })
+
   if(localStorage.getItem('TOKEN')){
     authenticated.value = true
   }
-  onMounted(() => {
-      let nav = document.querySelector('#nav-icon1')
-      nav.addEventListener('click', () => nav.classList.toggle('open'))
-  })
 
 </script>
 

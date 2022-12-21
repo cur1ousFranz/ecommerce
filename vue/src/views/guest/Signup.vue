@@ -3,12 +3,24 @@
     <div v-if="showSignUpForm" class=" p-6 mx-auto bg-gray-100 shadow-lg lg:w-5/12">
         <h1 class="text-2xl font-semibold">Sign Up</h1>
         <form @submit.prevent="signUp">
-            <div class="space-y-6 mt-8">
-                <input v-model="model.email" type="email" class="w-full py-2 border px-2" placeholder="Email Address">
-                <input v-model="model.password" type="password" class="w-full py-2 border px-2" placeholder="Password">
+            <div class="space-y-7 mt-8">
+                <div>
+                  <input v-model="model.email" type="text"
+                  :class=" model.errors.email ? 'w-full py-2 border border-red-500 focus:outline-red-500 px-2' : 'w-full py-2 border px-2'" placeholder="Email Address">
+                  <p class="text-sm absolute text-red-500"> {{ model.errors.email }}</p>
+                </div>
+                <div>
+                  <input v-model="model.password" type="password" :class=" model.errors.password ? 'w-full py-2 border border-red-500 focus:outline-red-500 px-2' : 'w-full py-2 border px-2'" placeholder="Password">
+                  <p class="text-sm absolute text-red-500"> {{ model.errors.password }}</p>
+                </div>
                 <input v-model="model.password_confirmation" type="password" class="w-full py-2 border px-2" placeholder="Confirm Pasword">
                 <button class="px-3 py-2 mt-4 w-full bg-gray-800 text-white hover:bg-gray-700">
-                    Sign Up
+                  <div v-if="loadStatus">
+                    Please wait...
+                  </div>
+                  <div v-else>
+                    Signup
+                  </div>
                 </button>
                 <p class="text-sm text-gray-600 text-center">Already have an account?
                     <router-link :to="{ name: 'Signin' }" class="text-blue-500">Sign In</router-link>
@@ -27,12 +39,14 @@
             </div>
         </form>
     </div>
+    <!-- EMAIL VERIFICATION FORM -->
     <div v-if="!showSignUpForm" class=" p-6 mx-auto bg-gray-100 shadow-lg lg:w-5/12">
         <h1 class="text-2xl font-semibold">Email Verification</h1>
         <form @submit.prevent="verifyEmail">
             <div class="space-y-2 mt-8">
                 <div>
-                  <input v-model="model.verify_code" type="text" class="w-full py-2 border px-2" placeholder="Enter Verfication Code">
+                  <input v-model="model.verify_code" type="text" :class=" model.errors.verify_code ? 'w-full py-2 border border-red-500 focus:outline-red-500 px-2' : 'w-full py-2 border px-2'" placeholder="Enter Verfication Code">
+                    <p class="text-sm absolute px-1 mt-2 text-red-500">{{ model.errors.verify_code }}</p>
                   <div class="flex justify-end space-x-2 ">
                     <p class="text-sm my-2 text-end">
                       Didn't recieve a code?
@@ -43,7 +57,12 @@
                   </div>
                 </div>
                 <button class="px-3 py-2 w-full bg-gray-800 text-white hover:bg-gray-700">
+                  <div v-if="loadStatus">
+                    Please wait...
+                  </div>
+                  <div v-else>
                     Confirm
+                  </div>
                 </button>
             </div>
         </form>
@@ -56,9 +75,11 @@ import { ref } from "@vue/reactivity"
 import store from '../../store';
 import alert from '../../alert.js'
 import { useRouter } from 'vue-router'
+import { computed, onMounted } from "@vue/runtime-core";
 
   const router = useRouter()
   const showSignUpForm = ref(true)
+  const loadStatus = computed(() => store.state.authLoadStatus.loadStatus)
   const model = ref({
       email : '',
       password : '',
@@ -66,7 +87,12 @@ import { useRouter } from 'vue-router'
       verify_code : '',
       resendTimer : 59,
       resendTimerShow : false,
-      intervalValid : ''
+      intervalValid : '',
+      errors : {
+        email : '',
+        password : '',
+        verify_code : ''
+      }
   })
 
   if(localStorage.getItem('USER_ID')){
@@ -77,34 +103,47 @@ import { useRouter } from 'vue-router'
     router.push({ name : 'LandingPage'})
   }
 
-  const signUp = () => {
+  const signUp = async () => {
+    model.value.errors.email = ''
+    model.value.errors.password = ''
     const formData = new FormData()
     formData.append('email', model.value.email)
     formData.append('password', model.value.password)
     formData.append('password_confirmation', model.value.password_confirmation)
-
-    store.dispatch('signUpUser', formData)
-      .then(() => {
-        showSignUpForm.value = false
-        alert('Verification code sent!')
-      })
+    try {
+      await store.dispatch('signUpUser', formData)
+      showSignUpForm.value = false
+      alert('Verification code sent!')
+    } catch (err) {
+      store.state.authLoadStatus.loadStatus = false
+      if (err.response.data.errors.hasOwnProperty('email')) {
+        model.value.errors.email = err.response.data.errors.email[0]
+      }
+      if (err.response.data.errors.hasOwnProperty('password')) {
+        model.value.errors.password = err.response.data.errors.password[0]
+      }
+    }
   }
 
-  const verifyEmail = () => {
+  const verifyEmail = async () => {
+    model.value.errors.verify_code = ''
     const formData = new FormData()
     formData.append('verify_code', model.value.verify_code)
     formData.append('user_id', localStorage.getItem('USER_ID'))
 
-    store.dispatch('verifyEmail', formData)
-      .then(() => {
-        // TODO redirect user
-        alert('Verification successful!')
+    try {
+      const res = await store.dispatch('verifyEmail', formData)
+      // TODO redirect user
+      alert('Verification successful!')
+      setTimeout(() => {
+        router.push({ name : 'Signin'})
+      }, 1000)
 
-        setTimeout(() => {
-          router.push({ name : 'LandingPage'})
-        }, 2000)
+    } catch (err) {
+      store.state.authLoadStatus.loadStatus = false
+      model.value.errors.verify_code = err.response.data.errors.verify_code[0]
+    }
 
-      })
   }
 
   const resendCode = () => {

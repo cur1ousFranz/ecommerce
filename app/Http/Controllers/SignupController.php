@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Auth\SignupRequest;
+use App\Http\Requests\Auth\VerifyCodeRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -11,13 +13,9 @@ use Illuminate\Support\Facades\Mail;
 
 class SignupController extends Controller
 {
-
-    public function store(Request $request)
+    public function store(SignupRequest $request)
     {
-        $validated = $request->validate([
-            'email' => ['required', 'email', Rule::unique('users', 'email')],
-            'password' => 'required|confirmed|min:6|max:16'
-        ]);
+        $validated = $request->validated();
         $code = rand(124101, 999999);
         $user = User::create([
             'email' => $validated['email'],
@@ -38,24 +36,21 @@ class SignupController extends Controller
 
     }
 
-    public function verifyEmail(Request $request)
+
+    public function verifyEmail(VerifyCodeRequest $request)
     {
-        $validated = $request->validate(['verify_code' => 'required']);
+        $validated = $request->validated();
         $user = User::where('id', $request->user_id)->first();
         if($user->verify_code == $validated['verify_code']){
             $user->update(['email_verified' => 1]);
-            Auth::login($user);
-            $token = $user->createToken('main')->plainTextToken;
-            return response([
-                'user' => $user,
-                'token' => $token
-            ]);
+            return response()->json([
+                'message' => 'Success',
+            ], 200);
         }
 
         return response()->json([
-            'message' => 'Invalid Code',
-        ], 403);
-
+            'errors' =>  ['verify_code' => ['Invalid Code.']],
+        ], 400);
     }
 
     public function resendVerifyEmail(Request $request)

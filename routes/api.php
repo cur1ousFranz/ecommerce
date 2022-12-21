@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\SignupController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +19,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
 });
 
+Route::get('/user/auth', [UserController::class, 'index']);
+Route::post('/signin', [LoginController::class, 'show']);
 Route::post('/signup', [SignupController::class, 'store']);
 Route::post('/signup/verify', [SignupController::class, 'verifyEmail']);
 Route::post('/signup/verify/resend', [SignupController::class, 'resendVerifyEmail']);
