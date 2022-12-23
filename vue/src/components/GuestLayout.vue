@@ -6,7 +6,7 @@
         </router-link>
         <div class="hidden space-x-3 relative md:flex">
 
-          <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-cart3 mt-2" viewBox="0 0 16 16">
+          <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-cart3 hover:text-gray-600 cursor-pointer mt-2" viewBox="0 0 16 16">
           <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
           </svg>
           <!-- MENU -->
@@ -21,13 +21,13 @@
             <div v-if="show" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg">
               <div class="rounded-md bg-white shadow-xs text-center">
                 <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                  <a href="#" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Profile</a>
-                  <a href="#" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Logout</a>
+                  <a href="#" class="block px-4 py-2 cursor-pointer text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Profile</a>
+                  <a @click="signOut" class="block px-4 py-2 cursor-pointer text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Logout</a>
                 </div>
               </div>
             </div>
           </div>
-          <router-link v-else :to="{ name : 'Signin'}" class="px-3 py-2">Sign In</router-link>
+          <router-link v-else :to="{ name : 'Signin'}" class="px-3 py-2 hover:text-gray-600">Sign In</router-link>
         </div>
 
         <div id="nav-icon1" class="md:hidden">
@@ -46,7 +46,10 @@
 <script setup>
 import Footer from './Footer.vue'
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import store from '../store'
+
+  const router = useRouter()
   const show = ref(false)
   const authenticated = ref(false)
   const showDropdown = () => {
@@ -56,13 +59,15 @@ import store from '../store'
   onMounted(async () => {
     let nav = document.querySelector('#nav-icon1')
     nav.addEventListener('click', () => nav.classList.toggle('open'))
-
-    const data = await store.dispatch('isUserAuth')
-    console.log(data);
   })
 
-  if(localStorage.getItem('TOKEN')){
+  if(localStorage.getItem('TOKEN')) {
     authenticated.value = true
+  }
+
+  const signOut = async () => {
+    await store.dispatch('signOutUser')
+    window.location = '/'
   }
 
 </script>

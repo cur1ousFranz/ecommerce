@@ -12,13 +12,23 @@
               <div>
                 <input v-model="model.password" type="password" :class=" model.errors.password ? 'w-full py-2 border border-red-500 focus:outline-red-500 px-2' : 'w-full py-2 border px-2'" placeholder="Password">
                 <p class="text-sm absolute text-red-500"> {{ model.errors.password }}</p>
+                <div class="flex items-start mt-3">
+                    <div class="flex items-center h-5">
+                    <input v-model="model.remember" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    </div>
+                    <label for="remember" class="ml-2 text-gray-900">
+                      Remember me
+                    </label>
+                </div>
               </div>
+
+
               <button class="px-3 py-2 mt-4 w-full bg-gray-800 text-white hover:bg-gray-700">
                   <div v-if="loadStatus">
                     Please wait...
                   </div>
                   <div v-else>
-                    Signin
+                    Sign In
                   </div>
               </button>
               <div class="text-center">
@@ -58,6 +68,7 @@ import { computed } from '@vue/runtime-core';
   const model = ref({
     email : '',
     password : '',
+    remember : false,
     invalid_credentials : '',
     errors : {
       email : '',
@@ -77,6 +88,7 @@ import { computed } from '@vue/runtime-core';
     const formData = new FormData()
     formData.append('email', model.value.email)
     formData.append('password', model.value.password)
+    formData.append('remember', model.value.remember)
     try {
       await store.dispatch('signInUser', formData)
       if(localStorage.getItem('USER_ID')){

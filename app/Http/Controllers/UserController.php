@@ -8,9 +8,13 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function index()
+
+    public function delete()
     {
-        // $user = User::where('id', Auth::user()->id)->first();
-        return response()->json(['data' => Auth::check()]);
+        Auth::user()->currentAccessToken()->delete();
+
+        return response([
+            'success' => true
+        ]);
     }
 }

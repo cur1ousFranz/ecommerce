@@ -16,7 +16,7 @@ const store = createStore({
   },
   getters: {},
   actions: {
-    // GUEST
+    // AUTH
     async googleAuthenticate({commit}) {
         const res = await axiosClient.get(`/auth/google`);
         console.log(res);
@@ -49,10 +49,11 @@ const store = createStore({
           commit('setUserID', res.data)
         }
     },
-    async isUserAuth() {
-        const res = await axiosClient.get(`/user/auth`);
-        return res
+    async signOutUser({commit}) {
+        await axiosClient.get(`/signout`);
+        commit('unsetUser')
     },
+
 
   },
   mutations: {
@@ -65,6 +66,10 @@ const store = createStore({
     },
     setAuthLoadStatus : (state, loading) => {
       state.authLoadStatus.loadStatus = loading
+    },
+    unsetUser : (state) => {
+      localStorage.removeItem('TOKEN')
+      state.user.token = null
     },
 
   },

@@ -19,7 +19,7 @@
                     Please wait...
                   </div>
                   <div v-else>
-                    Signup
+                    Sign Up
                   </div>
                 </button>
                 <p class="text-sm text-gray-600 text-center">Already have an account?
@@ -52,7 +52,7 @@
                       Didn't recieve a code?
                     </p>
                     <button id="resendBtn" @click="resendCode" :class="[!model.resendTimerShow ? 'text-blue-500 text-sm underline cursor-pointer' : 'text-gray-500 text-sm cursor-not-allowed']">
-                      {{ !model.resendTimerShow ? 'Resend' : 'Resend in: ' + model.resendTimer}}
+                      {{ !model.resendTimerShow ? 'Resend' : `Resend in ${model.resendTimer} sec` }}
                     </button>
                   </div>
                 </div>

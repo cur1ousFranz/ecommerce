@@ -16,28 +16,32 @@ class LoginController extends Controller
     public function show(SigninRequest $request)
     {
         $validated = $request->validated();
-
         $user = User::where('email', $validated['email'])->first();
-        if($user->email_verified == 1){
-            if(Auth::attempt($validated)){
-                $auth = Auth::user();
-                $token = $user->createToken('main')->plainTextToken;
+        $remember = $validated['remember'] ?? false;
+        unset($validated['remember']);
+
+        if($user){
+            if($user->email_verified == 1){
+                if(Auth::attempt($validated, $remember)){
+                    $auth = Auth::user();
+                    $token = $user->createToken('main')->plainTextToken;
+                    return response([
+                        'user' => $auth,
+                        'token' => $token
+                    ]);
+                }
+            }else{
+                $code = rand(124101, 999999);
+                $user->update(['verify_code' => $code]);
+                $data = array('code' => $code);
+                Mail::send('email.email-content', $data, function($message) use ($user){
+                    $message->to($user->email)->subject('Verfication Code');
+                });
+
                 return response([
-                    'user' => $auth,
-                    'token' => $token
+                    'user_id' => $user->id,
                 ]);
             }
-        }else{
-            $code = rand(124101, 999999);
-            $user->update(['verify_code' => $code]);
-            $data = array('code' => $code);
-            Mail::send('email.email-content', $data, function($message) use ($user){
-                $message->to($user->email)->subject('Verfication Code');
-            });
-
-            return response([
-                'user_id' => $user->id,
-            ]);
         }
 
         return response()->json([

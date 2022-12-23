@@ -17,9 +17,9 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
+    Route::get('/signout', [UserController::class, 'delete']);
 });
 
-Route::get('/user/auth', [UserController::class, 'index']);
 Route::post('/signin', [LoginController::class, 'show']);
 Route::post('/signup', [SignupController::class, 'store']);
 Route::post('/signup/verify', [SignupController::class, 'verifyEmail']);
