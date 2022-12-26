@@ -1,16 +1,8 @@
 <?php
 
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\SignupController;
-use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-
-// Route::group(['middleware' => 'cors'], function () {
-//     Route::get('/auth/google', [LoginController::class, 'googleAuth']);
-//     Route::get('/auth/google/callback', [LoginController::class, 'googleAuthCallBack']);
-// });
+use App\Http\Controllers\Auth\UserController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
@@ -20,10 +12,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/signout', [UserController::class, 'delete']);
 });
 
-Route::post('/signin', [LoginController::class, 'show']);
-Route::post('/signup', [SignupController::class, 'store']);
-Route::post('/signup/verify', [SignupController::class, 'verifyEmail']);
-Route::post('/signup/verify/resend', [SignupController::class, 'resendVerifyEmail']);
+Route::post('/signin', [UserController::class, 'show']);
+Route::post('/signup', [UserController::class, 'store']);
+Route::post('/signup/verify', [UserController::class, 'verifyEmail']);
+Route::post('/signup/verify/resend', [UserController::class, 'resendVerifyEmail']);
+Route::post('/reset', [UserController::class, 'update']);
+Route::post('/reset/password', [UserController::class, 'updatePassword']);
 
 
 

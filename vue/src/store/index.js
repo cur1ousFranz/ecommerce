@@ -53,7 +53,18 @@ const store = createStore({
         await axiosClient.get(`/signout`);
         commit('unsetUser')
     },
-
+    async forgotPasswordEmail({commit}, formData) {
+      commit('setAuthLoadStatus', true)
+      const res = await axiosClient.post(`/reset`, formData);
+      commit('setAuthLoadStatus', false)
+      return res
+    },
+    async forgotPasswordReset({commit}, formData) {
+      commit('setAuthLoadStatus', true)
+      const res = await axiosClient.post(`/reset/password`, formData);
+      commit('setAuthLoadStatus', false)
+      return res
+    },
 
   },
   mutations: {

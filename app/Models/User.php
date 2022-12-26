@@ -22,7 +22,8 @@ class User extends Authenticatable
         'password',
         'email_verified',
         'verify_code',
-        'role'
+        'role',
+        'forgot_password_token'
     ];
 
     /**
