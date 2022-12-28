@@ -26,25 +26,49 @@ class UserController extends Controller
         $remember = $request->remember;
 
         if($user){
-            if($user->email_verified == 1){
-                if(Auth::attempt($validated, $remember)){
-                    $auth = Auth::user();
-                    $token = $user->createToken('main')->plainTextToken;
+            if($user->role === 'customer'){
+                if($user->email_verified == 1){
+                    if(Auth::attempt($validated, $remember)){
+                        $auth = Auth::user();
+                        $token = $user->createToken('main')->plainTextToken;
+                        return response([
+                            'user' => $auth,
+                            'token' => $token
+                        ]);
+                    }
+                }else{
+                    $code = rand(124101, 999999);
+                    $user->update(['verify_code' => $code]);
+                    $data = array('code' => $code);
+                    Mail::send('email.email-content', $data, function($message) use ($user){
+                        $message->to($user->email)->subject('Verfication Code');
+                    });
+
                     return response([
-                        'user' => $auth,
-                        'token' => $token
+                        'user_id' => $user->id,
                     ]);
                 }
-            }else{
-                $code = rand(124101, 999999);
-                $user->update(['verify_code' => $code]);
-                $data = array('code' => $code);
-                Mail::send('email.email-content', $data, function($message) use ($user){
-                    $message->to($user->email)->subject('Verfication Code');
-                });
+            }
+        }
 
+        return response()->json([
+            'errors' =>  ['invalid_credentials' => ['Invalid Credentials.']],
+        ], 401);
+    }
+
+    public function showAdmin(SigninRequest $request)
+    {
+        $validated = $request->validated();
+        $user = User::where('email', $validated['email'])->first();
+        $remember = $request->remember;
+
+        if($user->role === 'admin'){
+            if(Auth::attempt($validated, $remember)){
+                $auth = Auth::user();
+                $token = $user->createToken('main')->plainTextToken;
                 return response([
-                    'user_id' => $user->id,
+                    'user' => $auth,
+                    'token' => $token
                 ]);
             }
         }
@@ -64,6 +88,8 @@ class UserController extends Controller
             'role' => 'customer',
             'verify_code' => $code,
         ]);
+
+        $user->customers()->create();
 
         $data = array('code' => $code);
         Mail::send('email.email-content', $data, function($message) use ($user){

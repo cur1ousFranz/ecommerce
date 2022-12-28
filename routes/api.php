@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\UserController;
@@ -12,7 +13,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/signout', [UserController::class, 'delete']);
 });
 
+// GUEST - CUSTOMER / ADMIN END
 Route::post('/signin', [UserController::class, 'show']);
+Route::post('/admin/signin', [UserController::class, 'showAdmin']);
 Route::post('/signup', [UserController::class, 'store']);
 Route::post('/signup/verify', [UserController::class, 'verifyEmail']);
 Route::post('/signup/verify/resend', [UserController::class, 'resendVerifyEmail']);
