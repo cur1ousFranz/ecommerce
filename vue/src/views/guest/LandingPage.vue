@@ -94,10 +94,10 @@
   </div>
 </template>
 
-<script>
-export default {
+<script setup>
+import store from "../../store";
 
-}
+
 </script>
 
 <style>
