@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\UserController;
+use App\Http\Controllers\CategoryController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
@@ -11,6 +12,9 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::get('/signout', [UserController::class, 'delete']);
+    Route::get('/product/category', [CategoryController::class, 'index']);
+    Route::get('/product/category/{category}', [CategoryController::class, 'show']);
+    Route::get('/product/category/{category}/attribute', [CategoryController::class, 'showAttribute']);
 });
 
 // GUEST - CUSTOMER / ADMIN END
