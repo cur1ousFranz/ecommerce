@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Value;
 use App\Models\Category;
+use App\Models\AttributeValue;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -22,6 +22,6 @@ class Attribute extends Model
 
     public function values()
     {
-        return $this->hasMany(Value::class);
+        return $this->hasMany(AttributeValue::class);
     }
 }

@@ -5,7 +5,6 @@ import router from './router'
 import store from './store'
 
 import Swal from 'sweetalert2'
-
 window.Swal = Swal
 
 createApp(App)

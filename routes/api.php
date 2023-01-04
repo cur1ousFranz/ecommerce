@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AttributeValueController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\UserController;
@@ -15,6 +16,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/product/category', [CategoryController::class, 'index']);
     Route::get('/product/category/{category}', [CategoryController::class, 'show']);
     Route::get('/product/category/{category}/attribute', [CategoryController::class, 'showAttribute']);
+
+    Route::post('/attribute/value', [AttributeValueController::class, 'create']);
+
+
 });
 
 // GUEST - CUSTOMER / ADMIN END

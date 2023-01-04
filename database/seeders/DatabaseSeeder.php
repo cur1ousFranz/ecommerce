@@ -1306,11 +1306,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         DB::table('attribute_category')->insert([
-            'attribute_id' => 8,
-            'category_id' => 24
-        ]);
-
-        DB::table('attribute_category')->insert([
             'attribute_id' => 14,
             'category_id' => 24
         ]);
@@ -1332,6 +1327,11 @@ class DatabaseSeeder extends Seeder
 
         DB::table('attribute_category')->insert([
             'attribute_id' => 24,
+            'category_id' => 24
+        ]);
+
+        DB::table('attribute_category')->insert([
+            'attribute_id' => 8,
             'category_id' => 24
         ]);
 

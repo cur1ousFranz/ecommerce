@@ -2,21 +2,26 @@
 
 namespace App\Models;
 
-use App\Models\Attribute;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class Value extends Model
+class AttributeValue extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'attribute_id',
+        'category_id',
         'name'
     ];
 
     public function attribute()
     {
         return $this->belongsTo(Attribute::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 }

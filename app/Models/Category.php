@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Product;
 use App\Models\Attribute;
+use App\Models\AttributeValue;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -34,5 +35,10 @@ class Category extends Model
     public function attributes()
     {
         return $this->belongsToMany(Attribute::class);
+    }
+
+    public function values()
+    {
+        return $this->hasMany(AttributeValue::class);
     }
 }
