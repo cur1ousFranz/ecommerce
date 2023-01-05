@@ -2,22 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Product\AttributeValueRequest;
-use App\Models\AttributeValue;
+use App\Models\Attribute;
 use Illuminate\Http\Request;
+use App\Models\AttributeValue;
+use App\Http\Requests\Product\AttributeValueRequest;
+use App\Models\Category;
 
 class AttributeValueController extends Controller
 {
 
-    public function create(AttributeValueRequest $request)
+    public function store(AttributeValueRequest $request)
     {
         $validated = $request->validated();
-        AttributeValue::create([
-            'attribute_id' => $validated['attribute_id'],
-            'category_id' => $validated['category_id'],
-            'name' => ucwords($validated['name']),
-        ]);
+        $attribute = Attribute::find($request->attribute_id);
+        $attribute->values()->create(['name' => ucwords($validated['name'])]);
+        $category = Category::find($request->category_id);
 
-        return response()->json(['message' => 'Succes'], 201);
+        return response()->json([
+            'data' => $category->attributes
+        ]);
     }
 }

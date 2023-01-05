@@ -11,17 +11,11 @@ class AttributeValue extends Model
 
     protected $fillable = [
         'attribute_id',
-        'category_id',
         'name'
     ];
 
     public function attribute()
     {
         return $this->belongsTo(Attribute::class);
-    }
-
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
     }
 }

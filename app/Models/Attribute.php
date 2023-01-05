@@ -12,12 +12,15 @@ class Attribute extends Model
     use HasFactory;
 
     protected $fillable = [
+        'category_id',
         'name'
     ];
 
+    protected $with = ['values'];
+
     public function categories()
     {
-        return $this->belongsToMany(Category::class);
+        return $this->belongsTo(Category::class);
     }
 
     public function values()

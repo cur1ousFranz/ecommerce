@@ -17,8 +17,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/product/category/{category}', [CategoryController::class, 'show']);
     Route::get('/product/category/{category}/attribute', [CategoryController::class, 'showAttribute']);
 
-    Route::post('/attribute/value', [AttributeValueController::class, 'create']);
-
+    Route::post('/attribute', [AttributeValueController::class, 'store']);
 
 });
 

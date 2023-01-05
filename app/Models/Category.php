@@ -34,11 +34,7 @@ class Category extends Model
 
     public function attributes()
     {
-        return $this->belongsToMany(Attribute::class);
+        return $this->hasMany(Attribute::class);
     }
 
-    public function values()
-    {
-        return $this->hasMany(AttributeValue::class);
-    }
 }

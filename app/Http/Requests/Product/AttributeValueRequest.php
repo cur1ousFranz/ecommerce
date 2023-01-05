@@ -20,8 +20,7 @@ class AttributeValueRequest extends FormRequest
     {
         return [
             'attribute_id' => 'required',
-            'category_id' => 'required',
-            'name' => 'required|string|unique:attribute_values,name,NULL,id,attribute_id,'. $this->attribute_id . ',category_id,' . $this->category_id,
+            'name' => 'required|string|unique:attribute_values,name,NULL,id,attribute_id,'. $this->attribute_id,
         ];
     }
 
@@ -29,7 +28,6 @@ class AttributeValueRequest extends FormRequest
     {
         return [
             'attribute_id.required' => 'Attribute ID is required.',
-            'category_id.required' => 'Category ID is required.',
             'name.required' => 'Value is required.',
             'name.string' => 'Value must not contain number and symbols.',
             'name.unique' => 'Value already exist in this attribute.',
