@@ -225,6 +225,7 @@ class DatabaseSeeder extends Seeder
         $co_ords->attributes()->create(['name' => 'Sleeve Length']);
         $co_ords->attributes()->create(['name' => 'Style']);
         $co_ords->attributes()->create(['name' => 'Top Type']);
+        $co_ords->attributes()->create(['name' => 'Color']);
 
         // DENIM
         $denim->attributes()->create(['name' => 'Category']);
@@ -282,6 +283,7 @@ class DatabaseSeeder extends Seeder
         $knitWear->attributes()->create(['name' => 'Material']);
         $knitWear->attributes()->create(['name' => 'Neckline']);
         $knitWear->attributes()->create(['name' => 'Pattern Type']);
+        $knitWear->attributes()->create(['name' => 'Size']);
         $knitWear->attributes()->create(['name' => 'Style']);
         $knitWear->attributes()->create(['name' => 'Type']);
         $knitWear->attributes()->create(['name' => 'Color']);
