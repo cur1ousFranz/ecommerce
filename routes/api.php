@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AttributeValueController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
@@ -13,11 +13,14 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::get('/signout', [UserController::class, 'delete']);
-    Route::get('/product/category', [CategoryController::class, 'index']);
-    Route::get('/product/category/{category}', [CategoryController::class, 'show']);
-    Route::get('/product/category/{category}/attribute', [CategoryController::class, 'showAttribute']);
+    Route::get('/category', [CategoryController::class, 'index']);
+    Route::get('/category/{category}', [CategoryController::class, 'show']);
+    Route::get('/category/{category}/attribute', [CategoryController::class, 'showAttribute']);
 
     Route::post('/attribute', [AttributeValueController::class, 'store']);
+
+    Route::post('/product', [ProductController::class, 'store']);
+    Route::get('/product', [ProductController::class, 'index']);
 
 });
 
