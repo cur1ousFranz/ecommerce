@@ -20,6 +20,13 @@ class ProductController extends Controller
         ]);
     }
 
+    public function show(Product $product)
+    {
+        return response()->json([
+            'data' => Product::with('productItem')->where(['id' => $product->id])->first()
+        ]);
+    }
+
     public function store(CreateProductRequest $request)
     {
         $validated = $request->validated();
@@ -44,7 +51,15 @@ class ProductController extends Controller
         ]);
 
         return response()->json([
-            'data' =>  Product::with('productItem')->latest()->paginate(10)
+            'data' =>  Product::with('productItem')->latest()->paginate($request->entry)
+        ]);
+    }
+
+    public function destroy(Product $product)
+    {
+        $product->delete();
+        return response()->json([
+            'data' => Product::with('productItem')->latest()->paginate(10)
         ]);
     }
 }

@@ -19,8 +19,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/attribute', [AttributeValueController::class, 'store']);
 
-    Route::post('/product', [ProductController::class, 'store']);
     Route::get('/product', [ProductController::class, 'index']);
+    Route::get('/product/{product}', [ProductController::class, 'show']);
+    Route::post('/product', [ProductController::class, 'store']);
+    Route::delete('/product/{product}', [ProductController::class, 'destroy']);
 
 });
 
