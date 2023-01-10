@@ -13,17 +13,17 @@ use App\Http\Requests\Product\CreateProductRequest;
 class ProductController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         return response()->json([
-            'data' => Product::with('productItem')->latest()->paginate(10)
+            'data' => Product::with('productItem')->latest()->paginate($request->entry)
         ]);
     }
 
     public function show(Product $product)
     {
         return response()->json([
-            'data' => Product::with('productItem')->where(['id' => $product->id])->first()
+            'data' => Product::with('categories','productItem')->where(['id' => $product->id])->first()
         ]);
     }
 
@@ -55,11 +55,17 @@ class ProductController extends Controller
         ]);
     }
 
-    public function destroy(Product $product)
+    public function destroy(Product $product, Request $request)
     {
+        $images = json_decode($product->productItem->product_image);
+        foreach ($images as $image) {
+            $path = parse_url($image , PHP_URL_PATH);
+            Storage::disk('s3')->delete($path);
+        }
+
         $product->delete();
         return response()->json([
-            'data' => Product::with('productItem')->latest()->paginate(10)
+            'data' => Product::with('productItem')->latest()->paginate($request->entry)
         ]);
     }
 }
