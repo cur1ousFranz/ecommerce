@@ -15,15 +15,17 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
+        $validated = $request->validate(['sort' => 'required', 'entry' => 'required', 'current_page' => 'required']);
+
         return response()->json([
-            'data' => Product::with('productItem')->latest()->paginate($request->entry)
+            'data' => $this->sort($validated['sort'], $validated['entry'], $validated['current_page'])
         ]);
     }
 
     public function show(Product $product)
     {
         return response()->json([
-            'data' => Product::with('categories','productItem')->where(['id' => $product->id])->first()
+            'data' => Product::with('categories', 'productItem')->where(['id' => $product->id])->first()
         ]);
     }
 
@@ -50,8 +52,9 @@ class ProductController extends Controller
             'price' => $validated['price'],
         ]);
 
+        $products = $this->sort($validated['sort'], $validated['entry'], $validated['current_page']);
         return response()->json([
-            'data' =>  Product::with('productItem')->latest()->paginate($request->entry)
+            'data' => $products
         ]);
     }
 
@@ -59,16 +62,16 @@ class ProductController extends Controller
     {
         $validated = $request->validated();
         $newImageArray = [];
-        if($request->has('deleted_image')){
+        if ($request->has('deleted_image')) {
             foreach ($request->deleted_image as $image) {
-                $path = parse_url($image , PHP_URL_PATH);
+                $path = parse_url($image, PHP_URL_PATH);
                 Storage::disk('s3')->delete($path);
 
                 $productImages = json_decode($product->productItem->product_image);
                 foreach ($productImages as $productImage) {
-                   if($productImage != $image){
-                    $newImageArray[] = $productImage;
-                   }
+                    if ($productImage != $image) {
+                        $newImageArray[] = $productImage;
+                    }
                 }
             }
             $product->productItem->product_image = json_encode($newImageArray);
@@ -82,22 +85,68 @@ class ProductController extends Controller
         $product->productItem->save();
         $product->save();
 
+        $products = $this->sort($validated['sort'], $validated['entry'], $validated['current_page']);
         return response()->json([
-            'data' => Product::with('productItem')->latest()->paginate($request->entry)
+            'data' => $products
         ]);
     }
 
     public function destroy(Product $product, Request $request)
     {
+        $validated = $request->validate(['sort' => 'required', 'entry' => 'required', 'current_page' => 'required']);
+
         $images = json_decode($product->productItem->product_image);
         foreach ($images as $image) {
-            $path = parse_url($image , PHP_URL_PATH);
+            $path = parse_url($image, PHP_URL_PATH);
             Storage::disk('s3')->delete($path);
         }
 
         $product->delete();
+        $products = $this->sort($validated['sort'], $validated['entry'], $validated['current_page']);
         return response()->json([
-            'data' => Product::with('productItem')->latest()->paginate($request->entry)
+            'data' => $products
         ]);
+    }
+
+    public function search(Request $request)
+    {
+        $validated = $request->validate(['entry' => 'required']);
+        $search = $request->search;
+        $entry = $validated['entry'];
+
+        $products = Product::with('productItem')->orWhereHas('productItem', function ($query) use ($search) {
+            $query->where('sku', 'like', '%'.$search.'%')
+                ->orWhere('price', 'like', '%'.$search.'%');
+        })
+        ->orWhere('name', 'like', '%'.$search.'%')
+        ->paginate($entry);
+
+        return response()->json([
+            'data' => $products
+        ]);
+    }
+
+    public function sort($sort, $perPage, $currentPage)
+    {
+        $products = Product::with('productItem');
+
+        switch($sort) {
+            case 'Latest': $products->latest();
+                break;
+            case 'Sku': $products->join('product_items', 'products.id', '=', 'product_items.product_id')
+                    ->orderBy('product_items.sku');
+                break;
+            case 'Name': $products->orderBy('name');
+                break;
+            case 'Qty': $products->join('product_items', 'products.id', '=', 'product_items.product_id')
+                    ->orderBy('product_items.qty_stock');
+                break;
+            case 'Price': $products->join('product_items', 'products.id', '=', 'product_items.product_id')
+                    ->orderBy('product_items.price');
+                break;
+        }
+
+        // Return at the same page
+        return $products->paginate($perPage, ['*'], 'page', $currentPage);
     }
 }

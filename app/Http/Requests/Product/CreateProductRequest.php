@@ -26,6 +26,9 @@ class CreateProductRequest extends FormRequest
             'qty_stock' => 'required|integer',
             'description' => 'required',
             'product_image' => 'required',
+            'entry' => 'required',
+            'sort' => 'required',
+            'current_page' => 'required',
         ];
     }
 
