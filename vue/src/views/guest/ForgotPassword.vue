@@ -9,7 +9,7 @@
                 <input v-model="model.email" type="text" :class=" model.errors.email ? 'w-full py-2 border border-red-500 focus:outline-red-500 px-2' : 'w-full py-2 border px-2'" placeholder="Email Address">
                 <p class="text-sm absolute text-red-500"> {{ model.errors.email }}</p>
               </div>
-              <div class="flex justify-center">
+              <div class="flex justify-end">
                 <router-link :to="{ name : 'Signin' }" class="cursor-pointer underline">Sign In instead?</router-link>
               </div>
 

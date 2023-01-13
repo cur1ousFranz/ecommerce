@@ -13,29 +13,36 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::get('/signout', [UserController::class, 'delete']);
-    Route::get('/category', [CategoryController::class, 'index']);
-    Route::get('/category/{category}', [CategoryController::class, 'show']);
-    Route::get('/category/{category}/attribute', [CategoryController::class, 'showAttribute']);
+
+    Route::controller(CategoryController::class)->group(function(){
+        Route::get('/category','index');
+        Route::get('/category/{category}', 'show');
+        Route::get('/category/{category}/attribute', 'showAttribute');
+    });
+
+    Route::controller(ProductController::class)->group(function(){
+        Route::get('/product', 'index');
+        Route::post('/product', 'store');
+        Route::get('/product/{product}', 'show');
+        Route::put('/product/{product}', 'update');
+        Route::delete('/product/{product}', 'destroy');
+        Route::post('/product/search', 'search');
+    });
 
     Route::post('/attribute', [AttributeValueController::class, 'store']);
-
-    Route::get('/product', [ProductController::class, 'index']);
-    Route::get('/product/{product}', [ProductController::class, 'show']);
-    Route::post('/product', [ProductController::class, 'store']);
-    Route::put('/product/{product}', [ProductController::class, 'update']);
-    Route::delete('/product/{product}', [ProductController::class, 'destroy']);
-    Route::post('/product/search', [ProductController::class, 'search']);
-
 });
 
 // GUEST - CUSTOMER / ADMIN END
-Route::post('/signin', [UserController::class, 'show']);
-Route::post('/admin/signin', [UserController::class, 'showAdmin']);
-Route::post('/signup', [UserController::class, 'store']);
-Route::post('/signup/verify', [UserController::class, 'verifyEmail']);
-Route::post('/signup/verify/resend', [UserController::class, 'resendVerifyEmail']);
-Route::post('/reset', [UserController::class, 'update']);
-Route::post('/reset/password', [UserController::class, 'updatePassword']);
+Route::controller(UserController::class)->group(function(){
+    Route::post('/signin','show');
+    Route::post('/admin/signin', 'showAdmin');
+    Route::post('/signup', 'store');
+    Route::post('/signup/verify', 'verifyEmail');
+    Route::post('/signup/verify/resend', 'resendVerifyEmail');
+    Route::post('/reset', 'update');
+    Route::post('/reset/password','updatePassword');
+});
+
 
 
 

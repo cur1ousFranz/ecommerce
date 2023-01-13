@@ -1,9 +1,17 @@
 <template>
   <div>
     <nav class="py-4 flex justify-between px-14 border-b">
-        <router-link :to="{ name : 'LandingPage' }" class="text-white cursor-pointer">
-            <img src="/img/nav-logo.png" class="w-36" alt="">
-        </router-link>
+        <div class="flex space-x-5">
+          <router-link :to="{ name : 'LandingPage' }" class="text-white cursor-pointer">
+              <img src="/img/nav-logo.png" class="w-36" alt="">
+          </router-link>
+          <div class="text-lg flex font-semibold px-2">
+            <h1 class="border-b-4 border-gray-700 px-1 py-3  text-gray-700">WOMEN</h1>
+            <h1 class=" px-2 py-3  text-gray-400 hover:text-gray-700">MEN</h1>
+            <h1 class=" px-2 py-3  text-gray-400 hover:text-gray-700">KIDS</h1>
+            <h1 class=" px-2 py-3  text-gray-400 hover:text-gray-700">HOME</h1>
+          </div>
+        </div>
         <div class="hidden space-x-3 relative md:flex">
 
           <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-cart3 hover:text-gray-600 cursor-pointer mt-2" viewBox="0 0 16 16">
