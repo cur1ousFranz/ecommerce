@@ -1,11 +1,14 @@
 <?php
 
-use App\Http\Controllers\AttributeValueController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\UserController;
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Auth\UserController;
+use App\Http\Controllers\AttributeValueController;
+use App\Http\Controllers\CustomerCategoryAttributeController;
+use App\Http\Controllers\CustomerCategoryController;
+use App\Http\Controllers\CustomerCategoryProductController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
@@ -14,6 +17,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/signout', [UserController::class, 'delete']);
 
+    // ADMIN
     Route::controller(CategoryController::class)->group(function(){
         Route::get('/category','index');
         Route::get('/category/{category}', 'show');
@@ -30,6 +34,23 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::post('/attribute', [AttributeValueController::class, 'store']);
+
+});
+
+// CUSTOMER
+Route::controller(CustomerCategoryController::class)->group(function(){
+    Route::get('/customer/category/women', 'womenIndex');
+    Route::get('/customer/category/men', 'menIndex');
+    Route::get('/customer/category/kids', 'kidsIndex');
+    // Route::get('/category/{category:slug}', 'show');
+});
+
+Route::controller(CustomerCategoryProductController::class)->group(function(){
+    Route::get('/customer/category/{category:slug}/product', 'show');
+});
+
+Route::controller(CustomerCategoryAttributeController::class)->group(function(){
+    Route::get('/customer/category/{category:slug}/attribute', 'show');
 });
 
 // GUEST - CUSTOMER / ADMIN END

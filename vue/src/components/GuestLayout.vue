@@ -1,5 +1,10 @@
 <template>
   <div>
+    <div class="hidden fixed  right-0 -mr-28 -rotate-90 mt-56  z-10 border md:flex">
+      <div class="px-12 py-2 cursor-pointer bg-gray-800 text-white font-bold text-2xl hover:bg-gray-900 " style="letter-spacing: 2px">
+        GET ₱150 OFF!
+      </div>
+    </div>
     <nav class="py-4 flex justify-between px-14 border-b">
         <div class="flex justify-center">
           <router-link :to="{ name : 'LandingPage' }" class="text-white cursor-pointer">

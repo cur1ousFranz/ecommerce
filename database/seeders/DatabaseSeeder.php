@@ -36,42 +36,170 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // WOMEN
-        $dresses = $women->children()->create(['name' => 'Dresses']);
-        $womenTops = $women->children()->create(['name' => 'Tops',]);
-        $womenBottoms = $women->children()->create(['name' => 'Bottoms',]);
-        $twoPiece = $women->children()->create(['name' => 'Two-Piece',]);
-        $jumpSuits = $women->children()->create(['name' => 'Jumpsuits',]);
-        $womenActiveWear = $women->children()->create(['name' => 'Activewear',]);
-        $lingerie = $women->children()->create(['name' => 'Lingerie & Loungewear',]);
-        $womenAccs = $women->children()->create(['name' => 'Accessories & Jewelry',]);
-        $womenShoeBag = $women->children()->create(['name' => 'Shoes & Bags',]);
-        $plusSize = $women->children()->create(['name' => 'Plus Size',]);
+        $dresses = $women->children()->create([
+            'name' => 'Dresses',
+            'slug' => 'women-dresses',
+            'icon' => '/img/women/Dresses.png'
+        ]);
+        $womenTops = $women->children()->create([
+            'name' => 'Tops',
+            'slug' => 'women-tops',
+            'icon' => '/img/women/Tops.png'
+        ]);
+        $womenBottoms = $women->children()->create([
+            'name' => 'Bottoms',
+            'slug' => 'women-bottoms',
+            'icon' => '/img/women/Bottoms.png'
+        ]);
+        $twoPiece = $women->children()->create([
+            'name' => 'Two-Piece',
+            'slug' => 'women-two-piece',
+            'icon' => '/img/women/Two-Piece.png'
+        ]);
+        $jumpSuits = $women->children()->create([
+            'name' => 'Jumpsuits',
+            'slug' => 'women-jumpsuits',
+            'icon' => '/img/women/Jumpsuits.png'
+        ]);
+        $womenActiveWear = $women->children()->create([
+            'name' => 'Activewear',
+            'slug' => 'women-activewear',
+            'icon' => '/img/women/Activewear.png'
+        ]);
+        $lingerie = $women->children()->create([
+            'name' => 'Lingerie & Loungewear',
+            'slug' => 'women-lingerie-&-loungewear',
+            'icon' => '/img/women/Lingerie.png'
+        ]);
+        $womenAccs = $women->children()->create([
+            'name' => 'Accessories & Jewelry',
+            'slug' => 'women-accessories-&-jewelry',
+            'icon' => '/img/women/Accessories.png'
+        ]);
+        $womenShoeBag = $women->children()->create([
+            'name' => 'Shoes & Bags',
+            'slug' => 'women-shoes-&-bags',
+            'icon' => '/img/women/ShoesBags.png'
+        ]);
+        $plusSize = $women->children()->create([
+            'name' => 'Plus Size',
+            'slug' => 'women-plus-size',
+            'icon' => '/img/women/PlusSize.png'
+        ]);
 
         // MEN
-        $menTops = $men->children()->create(['name' => 'Tops',]);
-        $menBottoms = $men->children()->create(['name' => 'Bottoms',]);
-        $co_ords = $men->children()->create(['name' => 'Co-ords',]);
-        $denim = $men->children()->create(['name' => 'Denim',]);
-        $menActiveWear = $men->children()->create(['name' => 'Activewear',]);
-        $extendedSize = $men->children()->create(['name' => 'Extended Size',]);
-        $hoodieSweat = $men->children()->create(['name' => 'Hoodie & Sweatshirts',]);
-        $knitWear = $men->children()->create(['name' => 'Knitwear',]);
-        $underWear = $men->children()->create(['name' => 'Underwear & Sleepwear',]);
-        $menShoeBag = $men->children()->create(['name' => 'Shoes & Bags',]);
-        $menAccs = $men->children()->create(['name' => 'Accessories & Jewelry',]);
-        $outerWear = $men->children()->create(['name' => 'Outerwear',]);
+        $menTops = $men->children()->create([
+            'name' => 'Tops',
+            'slug' => 'men-tops',
+            'icon' => '/img/men/Tops.png'
+        ]);
+        $menBottoms = $men->children()->create([
+            'name' => 'Bottoms',
+            'slug' => 'men-bottoms',
+            'icon' => '/img/men/Bottoms.png'
+        ]);
+        $co_ords = $men->children()->create([
+            'name' => 'Co-ords',
+            'slug' => 'men-co-ords',
+            'icon' => '/img/men/Co-ords.png'
+        ]);
+        $denim = $men->children()->create([
+            'name' => 'Denim',
+            'slug' => 'men-denim',
+            'icon' => '/img/men/Denim.png'
+        ]);
+        $menActiveWear = $men->children()->create([
+            'name' => 'Activewear',
+            'slug' => 'men-activewear',
+            'icon' => '/img/men/Activewear.png'
+        ]);
+        $extendedSize = $men->children()->create([
+            'name' => 'Extended Size',
+            'slug' => 'men-extended-size',
+            'icon' => '/img/men/Extended.png'
+        ]);
+        $hoodieSweat = $men->children()->create([
+            'name' => 'Hoodie & Sweatshirts',
+            'slug' => 'men-hoodie-&-sweatshirts',
+            'icon' => '/img/men/Hoodies.png'
+        ]);
+        $knitWear = $men->children()->create([
+            'name' => 'Knitwear',
+            'slug' => 'men-knitwear',
+            'icon' => '/img/men/Knitwear.png'
+        ]);
+        $underWear = $men->children()->create([
+            'name' => 'Underwear & Sleepwear',
+            'slug' => 'men-underwear-&-sleepwear',
+            'icon' => '/img/men/Underwear.png'
+        ]);
+        $menShoeBag = $men->children()->create([
+            'name' => 'Shoes & Bags',
+            'slug' => 'men-shoes-&-bags',
+            'icon' => '/img/men/ShoesBags.png'
+        ]);
+        $menAccs = $men->children()->create([
+            'name' => 'Accessories & Jewelry',
+            'slug' => 'men-accessories-&-jewelry',
+            'icon' => '/img/men/Accessory.png'
+        ]);
+        $outerWear = $men->children()->create([
+            'name' => 'Outerwear',
+            'slug' => 'men-outerwear',
+            'icon' => '/img/men/Outerwear.png'
+        ]);
 
         // KIDS
-        $baby = $kids->children()->create(['name' => 'Baby',]);
-        $toddBoys = $kids->children()->create(['name' => 'Toddler Boys',]);
-        $toddGirls = $kids->children()->create(['name' => 'Toddler Girls',]);
-        $boys = $kids->children()->create(['name' => 'Boys',]);
-        $girls = $kids->children()->create(['name' => 'Girls',]);
-        $bags = $kids->children()->create(['name' => 'Bags',]);
-        $kidsAccs = $kids->children()->create(['name' => 'Accessories & Jewelry',]);
-        $kidsShoe = $kids->children()->create(['name' => 'Shoes',]);
-        $maternity = $kids->children()->create(['name' => 'Maternity',]);
-        $mommy = $kids->children()->create(['name' => 'Mommy & Me',]);
+        $baby = $kids->children()->create([
+            'name' => 'Baby',
+            'slug' => 'kids-baby',
+            'icon' => '/img/kids/Baby.png'
+        ]);
+        $toddBoys = $kids->children()->create([
+            'name' => 'Toddler Boys',
+            'slug' => 'kids-toddler-boys',
+            'icon' => '/img/kids/ToddlerBoy.png'
+        ]);
+        $toddGirls = $kids->children()->create([
+            'name' => 'Toddler Girls',
+            'slug' => 'kids-toddler-girls',
+            'icon' => '/img/kids/ToddlerGirl.png'
+        ]);
+        $boys = $kids->children()->create([
+            'name' => 'Boys',
+            'slug' => 'kids-boys',
+            'icon' => '/img/kids/Boy.png'
+        ]);
+        $girls = $kids->children()->create([
+            'name' => 'Girls',
+            'slug' => 'kids-toddler-girls',
+            'icon' => '/img/kids/Girl.png'
+        ]);
+        $bags = $kids->children()->create([
+            'name' => 'Bags',
+            'slug' => 'kids-bags',
+            'icon' => '/img/kids/Bags.png'
+        ]);
+        $kidsAccs = $kids->children()->create([
+            'name' => 'Accessories & Jewelry',
+            'slug' => 'kids-accessories-&-Jewelry',
+            'icon' => '/img/kids/Accessory.png'
+        ]);
+        $kidsShoe = $kids->children()->create([
+            'name' => 'Shoes',
+            'slug' => 'kids-shoes',
+            'icon' => '/img/kids/Shoes.png'
+        ]);
+        $maternity = $kids->children()->create([
+            'name' => 'Maternity',
+            'slug' => 'kids-maternity',
+            'icon' => '/img/kids/Maternity.png',
+        ]);
+        $mommy = $kids->children()->create([
+            'name' => 'Mommy & Me',
+            'slug' => 'kids-mommy-&-me',
+            'icon' => '/img/kids/MommyMe.png'
+        ]);
 
         /** ATTRIBUTES | CATEGORY */
 

@@ -12,10 +12,38 @@ const store = createStore({
     authLoadStatus : {
       loadStatus : false
     },
+    category : {
+      women : [],
+      men : [],
+      kids : [],
+      products : [],
+      attributes : [],
+    }
 
   },
   getters: {},
   actions: {
+    // PRODUCTS
+    async getCategoryAttributes({commit}, slug) {
+      const res = await axiosClient.get(`/customer/category/${slug}/attribute`);
+      commit('setCategoryAttributes', res.data)
+    },
+    async getCategoryProducts({commit}, slug) {
+      const res = await axiosClient.get(`/customer/category/${slug}/product`);
+      commit('setCategoryProducts', res.data)
+    },
+    async getWomenCategory({commit}) {
+      const res = await axiosClient.get(`/customer/category/women`);
+      commit('setWomenCategory', res.data)
+    },
+    async getMenCategory({commit}) {
+      const res = await axiosClient.get(`/customer/category/men`);
+      commit('setMenCategory', res.data)
+    },
+    async getKidsCategory({commit}) {
+        const res = await axiosClient.get(`/customer/category/kids`);
+        commit('setKidsCategory', res.data)
+    },
     // AUTH
     async googleAuthenticate({commit}) {
         const res = await axiosClient.get(`/auth/google`);
@@ -68,6 +96,23 @@ const store = createStore({
 
   },
   mutations: {
+    // CUSTOMER
+    setCategoryAttributes : (state, attribute) => {
+      state.category.attributes = attribute.data
+    },
+    setCategoryProducts : (state, category) => {
+      state.category.products = category.data
+    },
+    setWomenCategory : (state, category) => {
+      state.category.women = category.data
+    },
+    setMenCategory : (state, category) => {
+      state.category.men = category.data
+    },
+    setKidsCategory : (state, category) => {
+      state.category.kids = category.data
+    },
+    // AUTH
     setUserID : (state, data) => {
       localStorage.setItem('USER_ID', data.user_id)
     },

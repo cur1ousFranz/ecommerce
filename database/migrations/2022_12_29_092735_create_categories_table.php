@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('parent_id')->nullable();
             $table->string('name');
+            $table->string('slug')->nullable();
+            $table->string('icon')->nullable();
             $table->timestamps();
         });
     }
