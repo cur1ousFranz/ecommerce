@@ -18,18 +18,25 @@ const store = createStore({
       kids : [],
       products : [],
       attributes : [],
+      loading : false
     }
 
   },
   getters: {},
   actions: {
     // PRODUCTS
+    async getFilteredProduts({commit}, formData) {
+      const res = await axiosClient.post(`/customer/category/product`, formData);
+      commit('setCategoryProducts', res.data)
+    },
     async getCategoryAttributes({commit}, slug) {
       const res = await axiosClient.get(`/customer/category/${slug}/attribute`);
       commit('setCategoryAttributes', res.data)
     },
     async getCategoryProducts({commit}, slug) {
+      commit('setCategoryProductsLoading', true)
       const res = await axiosClient.get(`/customer/category/${slug}/product`);
+      commit('setCategoryProductsLoading', false)
       commit('setCategoryProducts', res.data)
     },
     async getWomenCategory({commit}) {
@@ -99,6 +106,9 @@ const store = createStore({
     // CUSTOMER
     setCategoryAttributes : (state, attribute) => {
       state.category.attributes = attribute.data
+    },
+    setCategoryProductsLoading : (state, loading) => {
+      state.category.loading = loading
     },
     setCategoryProducts : (state, category) => {
       state.category.products = category.data

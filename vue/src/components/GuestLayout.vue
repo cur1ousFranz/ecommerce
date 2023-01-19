@@ -8,7 +8,7 @@
     <nav class="py-4 flex justify-between px-14 border-b">
         <div class="flex justify-center">
           <router-link :to="{ name : 'LandingPage' }" class="text-white cursor-pointer">
-            <img src="/img/nav-logo.png" class="w-36" alt="">
+            <img src="/img/nav-logo.png" class="w-24" alt="">
           </router-link>
         </div>
         <div class="hidden space-x-3 relative md:flex">

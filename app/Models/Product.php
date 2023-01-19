@@ -17,8 +17,6 @@ class Product extends Model
         'description',
     ];
 
-    // protected $with = ['productItem'];
-
     public function categories()
     {
         return $this->belongsToMany(Category::class);
