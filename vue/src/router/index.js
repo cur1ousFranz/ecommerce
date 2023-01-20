@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import GuestLayout from '../components/GuestLayout.vue'
+import ProductLoadingSkeleton from '../components/ProductLoadingSkeleton.vue'
 import LandingPage from '../views/guest/LandingPage.vue'
 import Signin from '../views/guest/Signin.vue'
 import Signup from '../views/guest/Signup.vue'

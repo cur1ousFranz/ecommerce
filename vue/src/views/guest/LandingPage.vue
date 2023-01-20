@@ -1,14 +1,13 @@
 <template>
   <div>
     <!-- BANNER -->
-
     <section>
-      <div class="grid grid-cols-1 px-24 h-screen md:grid-cols-2">
-        <div class="space-y-3 order-last md:my-32 md:order-first">
+      <div class="grid grid-cols-1 px-12 lg:grid-cols-2">
+        <div class="space-y-3 my-32">
           <h1 class="text-4xl font-semibold" style="letter-spacing: 2px">
             Discover products for a life well lived.
           </h1>
-          <h1 class="text-justify text-lg font-semibold md:text-left" style="letter-spacing: 2px">
+          <h1 class="text-justify text-lg font-semibold lg:text-left" style="letter-spacing: 2px">
             We get it. You want products that make you feel your best without devoting your life to finding them.
           </h1>
           <div class="flex justify-center">
@@ -17,19 +16,19 @@
             </router-link>
           </div>
         </div>
-        <div class="mt-8 flex justify-center">
-          <img src="/img/banner.jpg" class="w-2/3 h-fit" alt="">
+        <div class="hidden mt-8 lg:flex lg:justify-center">
+          <img src="/img/banner.jpg" class="w-2/3" alt="">
         </div>
       </div>
     </section>
 
     <!-- CATEGORIES -->
     <section>
-      <div class="px-6 mx-12 my-12 w-42 md:px-12">
+      <div class="px-6 my-12 w-42 md:px-12">
         <h1 class="text-lg mt-6 text-gray-600 text-center font-bold md:text-2xl">SHOP BY CATEGORY</h1>
         <div class="text-lg flex font-semibold justify-center md:justify-start">
-          <button v-for="category in model.categories.main" :key="category"
-          @click="selectCategory(category)" :class="[ model.categories.selectedCategory === category ? 'uppercase px-2 py-3 border-b border-gray-700 text-gray-700' : 'uppercase px-2 py-3 text-gray-400 hover:text-gray-700']" style="letter-spacing: 3px">{{ category }}</button>
+          <div v-for="category in model.categories.main" :key="category"
+          @click="selectCategory(category)" :class="[ model.categories.selectedCategory === category ? 'cursor-pointer uppercase px-2 py-3 border-b border-gray-700 text-gray-700' : 'cursor-pointer uppercase px-2 py-3 text-gray-400 hover:text-gray-700']" style="letter-spacing: 3px">{{ category }}</div>
         </div>
         <div v-if="model.categories.selectedCategory === 'Women'" class="grid grid-cols-2 my-4 gap-3 md:grid-cols-5">
           <ProductLink v-for="category in womenCategory.children" :key="category" :sub="category.name" :slug="category.slug" :icon="category.icon"/>
@@ -45,7 +44,7 @@
 
     <!-- NEW ARRIVALS -->
     <section>
-      <div class="px-6 mx-12 my-32 md:px-12">
+      <div class="px-6 my-32 md:px-12">
         <h1 class="text-lg my-6 text-gray-600 font-bold md:text-lg">
           <span class="inline-block text-yellow-500">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-lightning-charge" viewBox="0 0 16 16">

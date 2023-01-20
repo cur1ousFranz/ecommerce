@@ -42,12 +42,11 @@ Route::controller(CustomerCategoryController::class)->group(function(){
     Route::get('/customer/category/women', 'womenIndex');
     Route::get('/customer/category/men', 'menIndex');
     Route::get('/customer/category/kids', 'kidsIndex');
-    // Route::get('/category/{category:slug}', 'show');
 });
 
 Route::controller(CustomerCategoryProductController::class)->group(function(){
     Route::get('/customer/category/{category:slug}/product', 'show');
-    Route::post('/customer/category/product', 'index');
+    Route::get('/customer/category/product', 'index');
 });
 
 Route::controller(CustomerCategoryAttributeController::class)->group(function(){

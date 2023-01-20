@@ -18,7 +18,8 @@ const store = createStore({
       kids : [],
       products : [],
       attributes : [],
-      loading : false
+      loading : false,
+      attributesLoading : true
     }
 
   },
@@ -26,11 +27,14 @@ const store = createStore({
   actions: {
     // PRODUCTS
     async getFilteredProduts({commit}, formData) {
+      commit('setCategoryProductsLoading', true)
       const res = await axiosClient.post(`/customer/category/product`, formData);
+      commit('setCategoryProductsLoading', false)
       commit('setCategoryProducts', res.data)
     },
     async getCategoryAttributes({commit}, slug) {
       const res = await axiosClient.get(`/customer/category/${slug}/attribute`);
+      commit('setAttributesLoading', false)
       commit('setCategoryAttributes', res.data)
     },
     async getCategoryProducts({commit}, slug) {
@@ -104,6 +108,9 @@ const store = createStore({
   },
   mutations: {
     // CUSTOMER
+    setAttributesLoading : (state, loading) => {
+      state.category.attributesLoading = loading
+    },
     setCategoryAttributes : (state, attribute) => {
       state.category.attributes = attribute.data
     },

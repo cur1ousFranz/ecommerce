@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="hidden fixed  right-0 -mr-28 -rotate-90 mt-56  z-10 border md:flex">
+    <div class="hidden fixed right-0 -mr-28 -rotate-90 mt-56 z-10 border lg:flex">
       <div class="px-12 py-2 cursor-pointer bg-gray-800 text-white font-bold text-2xl hover:bg-gray-900 " style="letter-spacing: 2px">
         GET ₱150 OFF!
       </div>
     </div>
-    <nav class="py-4 flex justify-between px-14 border-b">
+    <nav class="py-4 flex justify-between px-4 border-b md:px-14">
         <div class="flex justify-center">
           <router-link :to="{ name : 'LandingPage' }" class="text-white cursor-pointer">
             <img src="/img/nav-logo.png" class="w-24" alt="">
@@ -43,8 +43,8 @@
             <span></span>
         </div>
     </nav>
-    <main>
-        <router-view></router-view>
+    <main class="max-w-screen-xl mx-auto">
+      <router-view></router-view>
     </main>
     <!-- <Footer/> -->
   </div>
@@ -82,7 +82,8 @@ import store from '../store'
 <style>
 #nav-icon1 {
   width: 50px;
-  height: 10px;
+  height: 5px;
+  margin-top: 5px;
   position: relative;
   -webkit-transform: rotate(0deg);
   -moz-transform: rotate(0deg);
@@ -99,8 +100,7 @@ import store from '../store'
   display: block;
   position: absolute;
   height: 5px;
-  margin-top: 5px;
-  width: 100%;
+  width: 75%;
   background: #231f20;
   border-radius: 9px;
   opacity: 1;
@@ -120,15 +120,15 @@ import store from '../store'
 }
 
 #nav-icon1 span:nth-child(2) {
-  top: 18px;
+  top: 9px;
 }
 
 #nav-icon1 span:nth-child(3) {
-  top: 36px;
+  top: 18px;
 }
 
 #nav-icon1.open span:nth-child(1) {
-  top: 18px;
+  top: 9px;
   -webkit-transform: rotate(135deg);
   -moz-transform: rotate(135deg);
   -o-transform: rotate(135deg);
@@ -141,7 +141,7 @@ import store from '../store'
 }
 
 #nav-icon1.open span:nth-child(3) {
-  top: 18px;
+  top: 9px;
   -webkit-transform: rotate(-135deg);
   -moz-transform: rotate(-135deg);
   -o-transform: rotate(-135deg);
