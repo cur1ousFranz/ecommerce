@@ -47,6 +47,7 @@ Route::controller(CustomerCategoryController::class)->group(function(){
 Route::controller(CustomerCategoryProductController::class)->group(function(){
     Route::get('/customer/category/{category:slug}/product', 'show');
     Route::get('/customer/category/product', 'index');
+    Route::post('/customer/category/product/search', 'search');
 });
 
 Route::controller(CustomerCategoryAttributeController::class)->group(function(){

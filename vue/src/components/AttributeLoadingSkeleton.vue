@@ -1,6 +1,8 @@
 <template>
   <div class="hidden w-2/12 max-h-screen h-screen space-y-6 overflow-auto md:block">
-    <div class="space-y-3" v-for="count in attributeCount" :key="count">
+    <div class="px-6 w-full flex justify-center">
+    </div>
+    <div class="space-y-3 px-6" v-for="count in attributeCount" :key="count">
       <div class="pulse bg-gray-200 w-3/4 pt-4"></div>
       <div class="flex justify-start space-x-2">
         <div class="pulse bg-gray-200 w-4 pt-2"></div>

@@ -1,19 +1,29 @@
 <template>
   <div>
     <section>
-      <div class="px-12 flex flex-col justify-between bg-gray-50 md:px-24 md:flex-row">
+      <div class="flex flex-col justify-between px-12 w-full md:flex-row bg-gray-50 ">
         <div class="py-6 flex space-x-2 text-gray-600" aria-label="Breadcrumb">
           <router-link :to="{ name : 'LandingPage'}" class="hover:text-gray-900 hover:underline">Home</router-link>
           <div>/</div>
-          <router-link :to="{ name : 'Product', params : { slug : slug}}" class="hover:text-gray-900 hover:underline">{{ convertSlug(slug) }}</router-link>
+          <router-link :to="{ name : 'Product', params : { slug : slug}}" class="text-gray-900  underline">{{ convertSlug(slug) }}</router-link>
         </div>
-        <div class="w-full py-6 flex text-gray-600 md:w-fit">
-          <input type="text" placeholder="Search" class="w-full h-fit py-2 border px-2">
-          <span class="bg-gray-800 py-2 px-2 text-white">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-            </svg>
-          </span>
+        <div class="w-full py-6 text-gray-600 md:w-fit">
+          <form @submit.prevent="searchProduct" class="flex">
+            <div class="px-2 border flex justify-between w-full bg-white">
+              <input v-model="model.search" type="text" placeholder="Search" class="w-full px-4 py-2 ring-white focus:ring-0 focus:outline-none">
+              <span @click="clearSearch" :class="[model.search ? 'mt-3 cursor-pointer hover:text-red-500'
+              : 'hidden mt-3 cursor-pointer hover:text-red-500']">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                  <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                </svg>
+              </span>
+            </div>
+            <button class="bg-gray-800 py-2 px-2 text-white cursor-pointer" :disabled="model.search == ''">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+              </svg>
+            </button>
+          </form>
         </div>
       </div>
     </section>
@@ -21,25 +31,25 @@
     <section>
       <div class="my-6 space-x-4 flex">
         <AttributeLoadingSkeleton v-if="attributesLoading"/>
-        <div v-else class="hidden max-w-2/12 max-h-screen space-y-6 overflow-auto md:block">
+        <div v-else class="hidden w-2/12 max-h-screen h-screen space-y-6 overflow-auto md:block">
           <!-- ATTRIBUTES -->
-          <div class="px-1 w-full flex justify-center lg:px-3 ">
+          <div class="px-1 w-full flex justify-center lg:px-3">
             <button @click="clearFilter" v-if="model.filterProduct.length" class="border w-full border-gray-800 py-1 px-8 hover:bg-gray-800 hover:text-white">Clear All ({{ model.filterProduct.length }})</button>
           </div>
           <div v-for="attribute in attributes" :key="attribute">
-            <div v-if="attribute.name !== 'Size' && attribute.name !== 'Color'" class="px-0 text-gray-700 md:pr-4">
+            <div v-if="attribute.name !== 'Size' && attribute.name !== 'Color'" class="px-6 text-gray-700">
               <h1 class="text-gray-900 font-semibold">{{ attribute.name }}</h1>
                 <Checkbox :id="value.id" @change="selectCheckBox(attribute.name, value.name, value.id)" v-for="value in sort(attribute.values)" :key="value.id" :label="value.name"/>
             </div>
 
-            <div id="size" v-if="attribute.name === 'Size'" class="px-0 md:pr-4">
+            <div id="size" v-if="attribute.name === 'Size'" class="px-6">
               <h1 class="text-gray-900 font-semibold">{{ attribute.name }}</h1>
               <div class="grid grid-cols-2">
                 <Checkbox :id="'size-' + size" @change="selectSizeCheckbox(size)" v-for="size in model.sizeList" :key="size" :label="size"/>
               </div>
             </div>
 
-            <div v-if="attribute.name === 'Color'" class="px-0 md:pr-4">
+            <div v-if="attribute.name === 'Color'" class="px-6">
               <h1 class="text-gray-900 font-semibold">{{ attribute.name }}</h1>
               <div  class="grid grid-cols-5 gap-1">
                 <Color v-for="color in model.colors" :key="color" @click="selectColor(color.color)" :selected="color.selected" :circleColor="color.class"/>
@@ -50,7 +60,7 @@
         </div>
 
         <ProductLoadingSkeleton v-if="productsLoading"/>
-        <div v-else class="w-12/12 px-3 md:w-10/12">
+        <div v-else class="w-12/12 px-6 md:w-10/12">
           <div v-if="model.products.productList.length" class="grid gap-y-6 gap-x-1 grid-cols-3 md:grid-cols-4">
             <div @mouseleave="replaceImage(product.id, product.product_item.product_image, 0)"
             @mouseover="replaceImage(product.id, product.product_item.product_image, 1)" v-for="product in model.products.productList" :key="product.id" class="cursor-pointer mx-2 relative">
@@ -90,6 +100,7 @@ import ProductLoadingSkeleton from '../../components/ProductLoadingSkeleton.vue'
 import AttributeLoadingSkeleton from '../../components/AttributeLoadingSkeleton.vue'
 import store from "../../store";
 
+// TODO:: PRICE RANGE
   const route = useRoute()
   let slug = route.params.slug
   const model = ref({
@@ -109,7 +120,8 @@ import store from "../../store";
       productList : [],
       productLoaded : false
     },
-    filterProduct : []
+    filterProduct : [],
+    search : ''
   })
 
   const attributesLoading = computed(() => store.state.category.attributesLoading)
@@ -188,6 +200,7 @@ import store from "../../store";
   }
 
   const filterProduct = async (attribute, value, checked) => {
+    model.value.search = ''
     if(checked) {
       model.value.filterProduct.push({ attribute : attribute, value : value})
     } else {
@@ -198,16 +211,18 @@ import store from "../../store";
       })
     }
 
-    if(model.value.filterProduct.length) {
-      const formData = new FormData()
-      formData.append('slug', route.params.slug)
-      formData.append('filters', JSON.stringify(model.value.filterProduct))
-      formData.append('_method', 'get')
-      model.value.products.productLoaded = false
-      await store.dispatch('getFilteredProduts', formData)
-      model.value.products.productLoaded = true
-    } else {
-      clearFilter()
+    if(model.value.products.productList.length) {
+      if(model.value.filterProduct.length) {
+        const formData = new FormData()
+        formData.append('slug', route.params.slug)
+        formData.append('filters', JSON.stringify(model.value.filterProduct))
+        formData.append('_method', 'get')
+        model.value.products.productLoaded = false
+        await store.dispatch('getFilteredProduts', formData)
+        model.value.products.productLoaded = true
+      } else {
+        clearFilter()
+      }
     }
   }
 
@@ -219,6 +234,26 @@ import store from "../../store";
     model.value.products.productLoaded = false
     await store.dispatch('getCategoryProducts', route.params.slug)
     model.value.products.productLoaded = true
+  }
+
+  const searchProduct = () => {
+    clearFilter()
+    store.state.category.products = []
+    model.value.products.productLoaded = false
+    if(model.value.search) {
+      const formData = new FormData()
+      formData.append('search', model.value.search)
+      formData.append('slug', route.params.slug)
+      store.dispatch('searchProduct', formData)
+    } else {
+      store.dispatch('getCategoryProducts', route.params.slug)
+    }
+    model.value.products.productLoaded = true
+  }
+
+  const clearSearch = () => {
+    model.value.search = ''
+    store.dispatch('getCategoryProducts', route.params.slug)
   }
 
   const back = () => {

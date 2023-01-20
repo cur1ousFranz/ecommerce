@@ -26,6 +26,12 @@ const store = createStore({
   getters: {},
   actions: {
     // PRODUCTS
+    async searchProduct({commit}, formData) {
+      commit('setCategoryProductsLoading', true)
+      const res = await axiosClient.post(`/customer/category/product/search`, formData);
+      commit('setCategoryProductsLoading', false)
+      commit('setCategoryProducts', res.data)
+    },
     async getFilteredProduts({commit}, formData) {
       commit('setCategoryProductsLoading', true)
       const res = await axiosClient.post(`/customer/category/product`, formData);
