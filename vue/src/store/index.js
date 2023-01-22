@@ -20,83 +20,101 @@ const store = createStore({
       attributes : [],
       loading : false,
       attributesLoading : true
+    },
+    products : {
+      product : [],
+      loading : false
     }
 
   },
   getters: {},
   actions: {
     // PRODUCTS
+    async getProduct({commit}, formData) {
+      commit('setProductLoading', true)
+      const res = await axiosClient.post(`/customer/product`, formData)
+      commit('setProductLoading', false)
+      commit('setProduct', res.data)
+      return res
+    },
     async searchProduct({commit}, formData) {
       commit('setCategoryProductsLoading', true)
       const res = await axiosClient.post(`/customer/category/product/search`, formData);
       commit('setCategoryProductsLoading', false)
       commit('setCategoryProducts', res.data)
+      return res
     },
     async getFilteredProduts({commit}, formData) {
       commit('setCategoryProductsLoading', true)
       const res = await axiosClient.post(`/customer/category/product`, formData);
       commit('setCategoryProductsLoading', false)
       commit('setCategoryProducts', res.data)
+      return res
     },
     async getCategoryAttributes({commit}, slug) {
       const res = await axiosClient.get(`/customer/category/${slug}/attribute`);
       commit('setAttributesLoading', false)
       commit('setCategoryAttributes', res.data)
+      return res
     },
     async getCategoryProducts({commit}, slug) {
       commit('setCategoryProductsLoading', true)
       const res = await axiosClient.get(`/customer/category/${slug}/product`);
       commit('setCategoryProductsLoading', false)
       commit('setCategoryProducts', res.data)
+      return res
     },
     async getWomenCategory({commit}) {
       const res = await axiosClient.get(`/customer/category/women`);
       commit('setWomenCategory', res.data)
+      return res
     },
     async getMenCategory({commit}) {
       const res = await axiosClient.get(`/customer/category/men`);
       commit('setMenCategory', res.data)
+      return res
     },
     async getKidsCategory({commit}) {
-        const res = await axiosClient.get(`/customer/category/kids`);
-        commit('setKidsCategory', res.data)
+      const res = await axiosClient.get(`/customer/category/kids`);
+      commit('setKidsCategory', res.data)
+      return res
     },
     // AUTH
     async googleAuthenticate({commit}) {
-        const res = await axiosClient.get(`/auth/google`);
-        console.log(res);
+      const res = await axiosClient.get(`/auth/google`);
+      console.log(res);
     },
     async signUpUser({commit}, formData) {
-        commit('setAuthLoadStatus', true)
-        const res = await axiosClient.post('/signup', formData);
-        commit('setUserID', res.data)
-        commit('setAuthLoadStatus', false)
+      commit('setAuthLoadStatus', true)
+      const res = await axiosClient.post('/signup', formData);
+      commit('setUserID', res.data)
+      commit('setAuthLoadStatus', false)
     },
     async verifyEmail({commit}, formData) {
-        commit('setAuthLoadStatus', true)
-        const res = await axiosClient.post(`/signup/verify`, formData);
-        localStorage.removeItem('USER_ID')
-        commit('setAuthLoadStatus', false)
-        return res
+      commit('setAuthLoadStatus', true)
+      const res = await axiosClient.post(`/signup/verify`, formData);
+      localStorage.removeItem('USER_ID')
+      commit('setAuthLoadStatus', false)
+      return res
     },
     async resendEmailCode({commit}, formData) {
-        const res = await axiosClient.post(`/signup/verify/resend`, formData);
-        return res.data
+      const res = await axiosClient.post(`/signup/verify/resend`, formData);
+      return res.data
     },
     async signInUser({commit}, formData) {
-        commit('setAuthLoadStatus', true)
-        const res = await axiosClient.post(`/signin`, formData);
-        if(res.data.user && res.data.token){
-          commit('setAuthLoadStatus', false)
-          commit('setUser', res.data)
-        }else{
-          commit('setAuthLoadStatus', false)
-          commit('setUserID', res.data)
-        }
+      commit('setAuthLoadStatus', true)
+      const res = await axiosClient.post(`/signin`, formData);
+      if(res.data.user && res.data.token){
+        commit('setAuthLoadStatus', false)
+        commit('setUser', res.data)
+      }else{
+        commit('setAuthLoadStatus', false)
+        commit('setUserID', res.data)
+      }
     },
     async signOutUser({commit}) {
-        await axiosClient.get(`/signout`);
-        commit('unsetUser')
+      await axiosClient.get(`/signout`);
+      commit('unsetUser')
     },
     async forgotPasswordEmail({commit}, formData) {
       commit('setAuthLoadStatus', true)
@@ -114,6 +132,12 @@ const store = createStore({
   },
   mutations: {
     // CUSTOMER
+    setProductLoading : (state, loading) => {
+      state.products.loading = loading
+    },
+    setProduct : (state, product) => {
+      state.products.product = product.data
+    },
     setAttributesLoading : (state, loading) => {
       state.category.attributesLoading = loading
     },

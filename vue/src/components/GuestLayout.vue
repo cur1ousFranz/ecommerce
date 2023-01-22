@@ -6,42 +6,45 @@
       </div>
     </div>
     <nav class="py-4 flex justify-between px-4 border-b md:px-14">
-        <div class="flex justify-center">
-          <router-link :to="{ name : 'LandingPage' }" class="text-white cursor-pointer">
-            <img src="/img/nav-logo.png" class="w-24" alt="">
-          </router-link>
-        </div>
-        <div class="hidden space-x-3 relative md:flex">
+      <div class="flex justify-center">
+        <router-link :to="{ name : 'LandingPage' }" class="text-white cursor-pointer">
+          <img src="/img/nav-logo.png" class="w-24" alt="" oncontextmenu="return false;">
+        </router-link>
+      </div>
 
-          <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-cart3 hover:text-gray-600 cursor-pointer mt-2" viewBox="0 0 16 16">
-          <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-          </svg>
-          <!-- MENU -->
-          <div v-if="authenticated" class="relative inline-block text-left">
-            <div>
-              <span class="rounded-md shadow-sm">
-                <button @click="showDropdown" type="button" class="inline-flex justify-center w-full rounded-full border-gray-300 px-3 py-1 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition duration-150 ease-in-out">
-                   <img src="/img/profile-default.png" class="w-7" alt="">
-                </button>
-              </span>
-            </div>
-            <div v-if="show" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg">
-              <div class="rounded-md bg-white shadow-xs text-center">
-                <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                  <a href="#" class="block px-4 py-2 cursor-pointer text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Profile</a>
-                  <a @click="signOut" class="block px-4 py-2 cursor-pointer text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Logout</a>
-                </div>
+      <div class="hidden space-x-3 relative md:flex">
+        <div id="small-banner-bg" class="px-12 mt-2 bg-slate-100">
+          <h1 id="small-banner" class="text-end text-red-500 transition duration-500 ease-in-out">Free Standard Shipping!</h1>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-cart3 hover:text-gray-600 cursor-pointer mt-2" viewBox="0 0 16 16">
+        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+        </svg>
+        <!-- MENU -->
+        <div v-if="authenticated" class="relative inline-block text-left">
+          <div>
+            <span class="rounded-md shadow-sm">
+              <button @click="showDropdown" type="button" class="inline-flex justify-center w-full rounded-full border-gray-300 px-3 py-1 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition duration-150 ease-in-out">
+                  <img src="/img/profile-default.png" class="w-7" alt="">
+              </button>
+            </span>
+          </div>
+          <div v-if="show" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg">
+            <div class="rounded-md bg-white shadow-xs text-center">
+              <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                <a href="#" class="block px-4 py-2 cursor-pointer text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Profile</a>
+                <a @click="signOut" class="block px-4 py-2 cursor-pointer text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Logout</a>
               </div>
             </div>
           </div>
-          <router-link v-else :to="{ name : 'Signin'}" class="px-3 py-2 hover:text-gray-600">Sign In</router-link>
         </div>
+        <router-link v-else :to="{ name : 'Signin'}" class="px-3 py-2 hover:text-gray-600">Sign In</router-link>
+      </div>
 
-        <div id="nav-icon1" class="md:hidden">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
+      <div id="nav-icon1" class="md:hidden">
+          <span></span>
+          <span></span>
+          <span></span>
+      </div>
     </nav>
     <main class="max-w-screen-xl mx-auto">
       <router-view></router-view>
@@ -58,15 +61,39 @@ import store from '../store'
 
   const router = useRouter()
   const show = ref(false)
+  const alternate = ref(false)
   const authenticated = ref(false)
   const showDropdown = () => {
     show.value = !show.value
   }
 
+  let smallBanner
+  let smallBannerBg
   onMounted(async () => {
     let nav = document.querySelector('#nav-icon1')
     nav.addEventListener('click', () => nav.classList.toggle('open'))
+
+    smallBanner = document.querySelector('#small-banner')
+    smallBannerBg = document.querySelector('#small-banner-bg')
   })
+
+  setInterval(() => {
+    if(alternate.value) {
+      smallBannerBg.classList.remove('bg-blue-100')
+      smallBannerBg.classList.add('bg-slate-100')
+      smallBanner.classList.remove('text-gray-700')
+      smallBanner.classList.add('text-red-500')
+      smallBanner.innerHTML = 'Free Standard Shipping!'
+    } else {
+      smallBannerBg.classList.add('bg-blue-100')
+      smallBannerBg.classList.remove('bg-slate-100')
+      smallBanner.classList.remove('text-red-500')
+      smallBanner.classList.add('text-gray-700')
+      smallBanner.innerHTML = 'Get ₱150 off Your First Order'
+
+    }
+    alternate.value = !alternate.value
+  }, 3000)
 
   if(localStorage.getItem('TOKEN')) {
     authenticated.value = true
@@ -76,6 +103,8 @@ import store from '../store'
     await store.dispatch('signOutUser')
     window.location = '/'
   }
+
+
 
 </script>
 

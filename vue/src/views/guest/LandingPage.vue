@@ -1,6 +1,7 @@
 <template>
   <div>
     <!-- BANNER -->
+    <ErrorDialog  v-if="model.errors.connection"/>
     <section>
       <div class="grid grid-cols-1 px-12 lg:grid-cols-2">
         <div class="space-y-3 my-32">
@@ -68,6 +69,7 @@
 import { ref } from "@vue/reactivity";
 import { computed, onMounted } from "@vue/runtime-core";
 import store from "../../store";
+import ErrorDialog from '../../components/ErrorDialog.vue'
 import ProductLink from '../../components/product/ProductLink.vue'
 
   const model = ref({
@@ -75,16 +77,23 @@ import ProductLink from '../../components/product/ProductLink.vue'
       main : ['Women', 'Men', 'Kids'],
       selectedCategory : 'Women'
     },
+    errors : {
+      connection : false
+    }
   })
 
   const womenCategory = computed(() => store.state.category.women)
   const menCategory = computed(() => store.state.category.men)
   const kidsCategory = computed(() => store.state.category.kids)
 
-  onMounted(() => {
-    store.dispatch('getWomenCategory')
-    store.dispatch('getMenCategory')
-    store.dispatch('getKidsCategory')
+  onMounted(async () => {
+    try {
+      await store.dispatch('getWomenCategory')
+      await store.dispatch('getMenCategory')
+      await store.dispatch('getKidsCategory')
+    } catch (error) {
+      model.value.errors.connection = true
+    }
   })
 
   const selectCategory = (category) => {

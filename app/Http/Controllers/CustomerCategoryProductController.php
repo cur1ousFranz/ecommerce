@@ -10,40 +10,49 @@ class CustomerCategoryProductController extends Controller
 {
     public function index(Request $request)
     {
-        $validated = $request->validate(['slug' => 'required', 'filters' => 'required']);
+        $validated = $request->validate(['slug' => 'required', 'price_range' => 'required']);
         $category = Category::where('slug', $validated['slug'])->first();
         $products = $category->products->load('productItem');
         $result = [];
-
         // Loop through product
-        foreach ($products as $product) {
-            $description = json_decode($product->description, true);
-            // Loop through product -> description array
-            foreach ($description as $key => $value) {
-                $filters = json_decode($validated['filters']);
-                // Check if the current key is 'Size'
-                // 'Size' key is a nested array of object
-                if($key === 'Size') {
-                    // Loop through product description -> sizes array
-                    foreach($value as $size) {
-                        // Loop through lists request and match attributes and values
-                        // The $size['count'] indicates how many sizes in specific product
-                        foreach ($filters as $filtered) {
-                            if($filtered->value === $size['name'] && $size['count'] > 0) {
-                                if(!in_array($product, $result)) {
-                                    $result[] = $product;
+        if($request->has('filters')) {
+            foreach ($products as $product) {
+                if($product->productItem->price <= $validated['price_range']) {
+                    $description = json_decode($product->description, true);
+                    $filters = json_decode($request->filters);
+                    // Loop through product -> description array
+                    foreach ($description as $key => $value) {
+                        // Check if the current key is 'Size'
+                        // 'Size' key is a nested array of object
+                        if($key === 'Size') {
+                            // Loop through product description -> sizes array
+                            foreach($value as $size) {
+                                // Loop through lists request and match attributes and values
+                                // The $size['count'] indicates how many sizes in specific product
+                                foreach ($filters as $filtered) {
+                                    if($filtered->value === $size['name'] && $size['count'] > 0) {
+                                        if(!in_array($product, $result)) {
+                                            $result[] = $product;
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            foreach ($filters as $filtered) {
+                                if($filtered->attribute === $key && $filtered->value === $value) {
+                                    if(!in_array($product, $result)) {
+                                        $result[] = $product;
+                                    }
                                 }
                             }
                         }
                     }
-                } else {
-                    foreach ($filters as $filtered) {
-                        if($filtered->attribute === $key && $filtered->value === $value) {
-                            if(!in_array($product, $result)) {
-                                $result[] = $product;
-                            }
-                        }
-                    }
+                }
+            }
+        } else {
+            foreach ($products as $product) {
+                if($product->productItem->price <= $validated['price_range']) {
+                    $result[] = $product;
                 }
             }
         }

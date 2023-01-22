@@ -9,6 +9,7 @@ use App\Http\Controllers\AttributeValueController;
 use App\Http\Controllers\CustomerCategoryAttributeController;
 use App\Http\Controllers\CustomerCategoryController;
 use App\Http\Controllers\CustomerCategoryProductController;
+use App\Http\Controllers\CustomerProductController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
@@ -52,6 +53,10 @@ Route::controller(CustomerCategoryProductController::class)->group(function(){
 
 Route::controller(CustomerCategoryAttributeController::class)->group(function(){
     Route::get('/customer/category/{category:slug}/attribute', 'show');
+});
+
+Route::controller(CustomerProductController::class)->group(function(){
+    Route::get('/customer/product', 'show');
 });
 
 // GUEST - CUSTOMER / ADMIN END

@@ -1,8 +1,8 @@
 <template>
-  <div class="w-10/12 lg:w-10/12 px-4">
+  <div>
     <div class="grid gap-y-6 gap-x-4 px-4 grid-cols-3 md:grid-cols-4">
       <div class="space-y-2" v-for="count in productCount" :key="count">
-        <div class="pulse bg-gray-200 pt-72 w-full"></div>
+        <div class="pulse bg-gray-200 pt-36 md:pt-56 lg:pt-72 w-full"></div>
         <div class="pulse bg-gray-200 pt-3 w-full"></div>
         <div class="pulse bg-gray-200 pt-3 w-1/3"></div>
       </div>
@@ -13,7 +13,7 @@
 <script setup>
 import { ref } from "@vue/reactivity";
 
-  const productCount = ref(12)
+  const productCount = ref(16)
 
 </script>
 

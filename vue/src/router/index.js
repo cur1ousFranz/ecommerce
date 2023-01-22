@@ -7,6 +7,7 @@ import Signup from '../views/guest/Signup.vue'
 import ForgotPassword from '../views/guest/ForgotPassword.vue'
 import ForgotPasswordReset from '../views/guest/ForgotPasswordReset.vue'
 import Product from '../views/guest/Product.vue'
+import ProductShow from '../views/guest/ProductShow.vue'
 const routes = [
   {
     path: '/',
@@ -19,6 +20,7 @@ const routes = [
       { path: '/reset', name: 'ForgotPassword' , component: ForgotPassword },
       { path: '/reset/password/', name: 'ForgotPasswordReset' , component: ForgotPasswordReset },
       { path: '/:slug' , name: 'Product' , component: Product },
+      { path: '/:slug/:name=:sku' , name: 'ProductShow' , component: ProductShow },
 
     ]
   },
