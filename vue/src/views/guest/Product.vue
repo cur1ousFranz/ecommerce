@@ -4,9 +4,9 @@
       <div class="flex flex-col py-6 justify-between px-12 w-full md:flex-row">
         <div class="flex space-x-2 text-gray-600" aria-label="Breadcrumb">
           <router-link :to="{ name : 'LandingPage'}" class="uppercase text-sm  hover:text-gray-900 hover:underline">Home</router-link>
-          <div>/</div>
+          <div class="text-sm">/</div>
           <router-link :to="{ name : 'Product', params : { slug : slug}}" class="uppercase text-sm  hover:text-gray-900 hover:underline">{{ convertSlug(slug) }}</router-link>
-          <div>/</div>
+          <div class="text-sm">/</div>
           <h1 @click="clearFilter" class="uppercase text-sm  cursor-pointer text-gray-900 hover:underline">View All</h1>
         </div>
         <div class="w-full text-gray-600 md:w-fit">
@@ -82,8 +82,8 @@
               <div v-if="product.product_item.sale_price" class="absolute mt-2 px-1 text-sm bg-gray-800 text-white">
                 -{{ product.product_item.sale_price }}%
               </div>
-              <img :id="'img-'+ product.id" :src="JsonParse(product.product_item.product_image)" @load="defaultImage(product.id)" class="hidden object-fill abosulute">
-              <h1 class="text-sm py-1 px-1 text-gray-600"  style="width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ product.name }}</h1>
+              <img :id="'img-'+ product.id" :src="JsonParse(product.product_item.product_image)" @load="defaultImage(product.id)" class="hidden object-contain">
+              <h1 class="text-sm py-1 px-1 text-gray-600" style="width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ product.name }}</h1>
               <div class="flex justify-start">
                 <h1 class="font-semibold px-2 text-orange-500 text-sm">
                   ₱ {{ formatPrice(product.product_item.price, product.product_item.sale_price) }}

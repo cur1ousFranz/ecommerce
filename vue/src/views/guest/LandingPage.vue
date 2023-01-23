@@ -12,9 +12,9 @@
             We get it. You want products that make you feel your best without devoting your life to finding them.
           </h1>
           <div class="flex justify-center">
-            <router-link :to="{ name : 'Signin' }" class="px-3 py-2 mt-4 bg-gray-800 text-white hover:bg-gray-700">
+            <a href="#category" class="cursor-pointer px-3 py-2 mt-4 bg-gray-800 text-white hover:bg-gray-700">
               Shop Now!
-            </router-link>
+            </a>
           </div>
         </div>
         <div class="hidden mt-8 lg:flex lg:justify-center">
@@ -25,7 +25,7 @@
 
     <!-- CATEGORIES -->
     <section>
-      <div class="px-6 my-12 w-42 md:px-12">
+      <div id="category" class="px-6 my-12 w-42 md:px-12">
         <h1 class="text-lg mt-6 text-gray-600 text-center font-bold md:text-2xl">SHOP BY CATEGORY</h1>
         <div class="text-lg flex font-semibold justify-center md:justify-start">
           <div v-for="category in model.categories.main" :key="category"
@@ -105,3 +105,9 @@ import ProductLink from '../../components/product/ProductLink.vue'
   }
 
 </script>
+
+<style>
+html {
+  scroll-behavior: smooth;
+}
+</style>

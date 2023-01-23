@@ -90,7 +90,8 @@ class UserController extends Controller
             'verify_code' => $code,
         ]);
 
-        $user->customers()->create();
+        $customer = $user->customers()->create();
+        $customer->cart()->create();
 
         $data = array('code' => $code);
         Mail::send('email.email-content', $data, function($message) use ($user){

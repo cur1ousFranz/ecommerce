@@ -48,7 +48,7 @@
                   Sign In With Google
               </button>
               <p class="text-sm text-gray-600 text-center">Don't have an account yet?
-                  <router-link :to="{ name: 'Signup' }" class="text-blue-500">Sign Up</router-link>
+                <span @click="signUpPage" class="cursor-pointer text-blue-500">Sign Up</span>
               </p>
           </div>
         </form>
@@ -59,11 +59,13 @@
 <script setup>
 import store from '../../store';
 import alert from '../../alert.js'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { ref } from '@vue/reactivity';
-import { computed } from '@vue/runtime-core';
+import { computed, onMounted } from '@vue/runtime-core';
 
+  const route = useRoute()
   const router = useRouter()
+
   const loadStatus = computed(() => store.state.authLoadStatus.loadStatus)
   const model = ref({
     email : '',
@@ -74,12 +76,21 @@ import { computed } from '@vue/runtime-core';
       email : '',
       password : '',
       invalid_credentials : '',
+    },
+    params : {
+      url : ''
     }
   })
 
-  if(store.state.user.token){
-    router.push({ name : 'LandingPage'})
-  }
+  onMounted(() => {
+    if(route.params.url) {
+      model.value.params.url = route.params.url
+    }
+
+    if(store.state.user.token){
+      router.push({ name : 'LandingPage'})
+    }
+  })
 
   const signIn = async () => {
     model.value.errors.email = ''
@@ -95,7 +106,11 @@ import { computed } from '@vue/runtime-core';
         router.push({ name : 'Signup'})
         alert('Verification code sent!')
       }else{
-        window.location.href = '/'
+        if(model.value.params.url) {
+          window.location.href = `${router.options.base}${model.value.params.url}`
+        } else {
+          window.location.href = '/'
+        }
       }
     } catch (err) {
       store.state.authLoadStatus.loadStatus = false
@@ -108,6 +123,14 @@ import { computed } from '@vue/runtime-core';
       if(err.response.data.errors.hasOwnProperty('invalid_credentials')){
         model.value.errors.invalid_credentials = err.response.data.errors.invalid_credentials[0]
       }
+    }
+  }
+
+  const signUpPage = () => {
+    if(model.value.params.url) {
+      router.push({ name : 'Signup', params : { url : model.value.params.url}})
+    } else {
+      router.push({ name : 'Signup'})
     }
   }
 

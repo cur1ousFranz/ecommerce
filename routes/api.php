@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\AttributeValueController;
+use App\Http\Controllers\CustomerCartController;
 use App\Http\Controllers\CustomerCategoryAttributeController;
 use App\Http\Controllers\CustomerCategoryController;
 use App\Http\Controllers\CustomerCategoryProductController;
@@ -35,6 +36,13 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::post('/attribute', [AttributeValueController::class, 'store']);
+
+    Route::controller(CustomerCartController::class)->group(function(){
+        Route::get('/customer/cart', 'index');
+        Route::post('/customer/cart', 'store');
+        Route::put('/customer/cart/product/{product}', 'update');
+        Route::delete('/customer/cart/product/{product}', 'destroy');
+    });
 
 });
 

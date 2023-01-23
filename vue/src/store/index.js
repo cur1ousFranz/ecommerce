@@ -24,12 +24,44 @@ const store = createStore({
     products : {
       product : [],
       loading : false
+    },
+    cart : {
+      data : [],
+      loading : false
     }
 
   },
   getters: {},
   actions: {
     // PRODUCTS
+    async deleteCartProduct({commit}, formData) {
+      commit('setCustomerCartLoading', true)
+      const res = await axiosClient.post(`/customer/cart/product/${formData.get('product_id')}`, formData)
+      commit('setCustomerCartLoading', false)
+      commit('setCustomerCart', res.data)
+      return res
+    },
+    async addCartProductQuantity({commit}, formData) {
+      commit('setCustomerCartLoading', true)
+      const res = await axiosClient.post(`/customer/cart/product/${formData.get('product_id')}`, formData)
+      commit('setCustomerCartLoading', false)
+      commit('setCustomerCart', res.data)
+      return res
+    },
+    async addToCartProduct({commit}, formData) {
+      commit('setCustomerCartLoading', true)
+      const res = await axiosClient.post(`/customer/cart`, formData)
+      commit('setCustomerCartLoading', false)
+      commit('setCustomerCart', res.data)
+      return res
+    },
+    async getCustomerCart({commit}) {
+      commit('setCustomerCartLoading', true)
+      const res = await axiosClient.get(`/customer/cart`)
+      commit('setCustomerCartLoading', false)
+      commit('setCustomerCart', res.data)
+      return res
+    },
     async getProduct({commit}, formData) {
       commit('setProductLoading', true)
       const res = await axiosClient.post(`/customer/product`, formData)
@@ -132,6 +164,12 @@ const store = createStore({
   },
   mutations: {
     // CUSTOMER
+    setCustomerCartLoading : (state, loading) => {
+      state.cart.loading = loading
+    },
+    setCustomerCart : (state, cart) => {
+      state.cart.data = cart.data
+    },
     setProductLoading : (state, loading) => {
       state.products.loading = loading
     },

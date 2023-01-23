@@ -23,7 +23,7 @@
                   </div>
                 </button>
                 <p class="text-sm text-gray-600 text-center">Already have an account?
-                    <router-link :to="{ name: 'Signin' }" class="text-blue-500">Sign In</router-link>
+                    <span @click="signInPage" class="cursor-pointer text-blue-500">Sign In</span>
                 </p>
                 <div class="flex space-x-2">
                     <hr class="w-full h-1 border-t border-gray-400">
@@ -74,9 +74,10 @@
 import { ref } from "@vue/reactivity"
 import store from '../../store';
 import alert from '../../alert.js'
-import { useRouter } from 'vue-router'
-import { computed } from "@vue/runtime-core";
+import { useRoute, useRouter } from 'vue-router'
+import { computed, onMounted } from "@vue/runtime-core";
 
+  const route = useRoute()
   const router = useRouter()
   const showSignUpForm = ref(true)
   const loadStatus = computed(() => store.state.authLoadStatus.loadStatus)
@@ -92,16 +93,25 @@ import { computed } from "@vue/runtime-core";
         email : '',
         password : '',
         verify_code : ''
+      },
+      params : {
+        url : ''
       }
   })
 
-  if(localStorage.getItem('USER_ID')){
-    showSignUpForm.value = false
-  }
+  onMounted(() => {
+    if(route.params.url) {
+      model.value.params.url = route.params.url
+    }
 
-  if(localStorage.getItem('TOKEN')){
-    router.push({ name : 'LandingPage'})
-  }
+    if(localStorage.getItem('USER_ID')){
+      showSignUpForm.value = false
+    }
+
+    if(localStorage.getItem('TOKEN')){
+      router.push({ name : 'LandingPage'})
+    }
+  })
 
   const signUp = async () => {
     model.value.errors.email = ''
@@ -136,7 +146,12 @@ import { computed } from "@vue/runtime-core";
       // TODO redirect user
       alert('Verification successful!')
       setTimeout(() => {
-        router.push({ name : 'Signin'})
+        if(model.value.params.url) {
+          router.push({ name : 'Signin', params : { url : model.value.params.url}})
+        } else {
+          router.push({ name : 'Signin'})
+        }
+
       }, 1000)
 
     } catch (err) {
@@ -165,6 +180,14 @@ import { computed } from "@vue/runtime-core";
           }
         }, 1000);
       })
+  }
+
+  const signInPage = () => {
+    if(model.value.params.url) {
+      router.push({ name: 'Signin', params : { url : model.value.params.url} })
+    } else {
+      router.push({ name: 'Signin' })
+    }
   }
 
 </script>

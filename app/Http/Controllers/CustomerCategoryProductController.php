@@ -17,7 +17,11 @@ class CustomerCategoryProductController extends Controller
         // Loop through product
         if($request->has('filters')) {
             foreach ($products as $product) {
-                if($product->productItem->price <= $validated['price_range']) {
+                $originalPrice = $product->productItem->price;
+                $salePercentage = $product->productItem->sale_price / 100;
+                $newPrice = $originalPrice - ($originalPrice * $salePercentage);
+
+                if(ceil($newPrice) <= $validated['price_range']) {
                     $description = json_decode($product->description, true);
                     $filters = json_decode($request->filters);
                     // Loop through product -> description array
@@ -51,7 +55,11 @@ class CustomerCategoryProductController extends Controller
             }
         } else {
             foreach ($products as $product) {
-                if($product->productItem->price <= $validated['price_range']) {
+                $originalPrice = $product->productItem->price;
+                $salePercentage = $product->productItem->sale_price / 100;
+                $newPrice = $originalPrice - ($originalPrice * $salePercentage);
+
+                if(ceil($newPrice) <= $validated['price_range']) {
                     $result[] = $product;
                 }
             }

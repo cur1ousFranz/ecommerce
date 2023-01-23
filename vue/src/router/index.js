@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import GuestLayout from '../components/GuestLayout.vue'
-import ProductLoadingSkeleton from '../components/ProductLoadingSkeleton.vue'
+import ProductShowLoadingSkeleton from '../components/ProductShowLoadingSkeleton.vue'
 import LandingPage from '../views/guest/LandingPage.vue'
 import Signin from '../views/guest/Signin.vue'
 import Signup from '../views/guest/Signup.vue'
@@ -15,12 +15,13 @@ const routes = [
     redirect : '/',
     children: [
       { path: '/', name: 'LandingPage' , component: LandingPage },
-      { path: '/signin', name: 'Signin' , component: Signin },
-      { path: '/signup', name: 'Signup' , component: Signup },
+      { path: '/signin/:url?', name: 'Signin' , component: Signin },
+      { path: '/signup/:url?', name: 'Signup' , component: Signup },
       { path: '/reset', name: 'ForgotPassword' , component: ForgotPassword },
       { path: '/reset/password/', name: 'ForgotPasswordReset' , component: ForgotPasswordReset },
       { path: '/:slug' , name: 'Product' , component: Product },
       { path: '/:slug/:name=:sku' , name: 'ProductShow' , component: ProductShow },
+      { path: '/skeleton' , name: 'ProductShowLoadingSkeleton' , component: ProductShowLoadingSkeleton },
 
     ]
   },
@@ -28,6 +29,7 @@ const routes = [
 ]
 
 const router = createRouter({
+  base : '/',
   mode : 'history',
   history : createWebHistory(),
   routes

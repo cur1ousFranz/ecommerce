@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Cart;
 use App\Models\Category;
 use App\Models\ProductItem;
 use Illuminate\Database\Eloquent\Model;
@@ -25,5 +26,10 @@ class Product extends Model
     public function productItem()
     {
         return $this->hasOne(ProductItem::class);
+    }
+
+    public function carts()
+    {
+        return $this->belongsToMany(Cart::class);
     }
 }
