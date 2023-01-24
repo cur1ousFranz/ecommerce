@@ -10,19 +10,22 @@ use Illuminate\Support\Facades\DB;
 
 class CustomerCartController extends Controller
 {
-    public function index(Request $request)
+    public function getCustomer()
     {
-        $customer = Customer::where('user_id', Auth::user()->id)->first();
-
+        return Customer::with('cart')->where('user_id', Auth::user()->id)->first();
+    }
+    public function index()
+    {
+        $customer = $this->getCustomer();
         return response()->json([
-            'data' => $customer->cart->products->load('productItem')
+            'data' => $customer->cart->products->load('productItem', 'categories')
         ]);
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate(['product_id' => 'required', 'size' => 'required']);
-        $customer = Customer::with('cart')->where('user_id', Auth::user()->id)->first();
+        $customer = $this->getCustomer();
         $product = Product::with('carts')->where('id', $validated['product_id'])->first();
 
         $cart_product = DB::table('cart_product')->where([
@@ -46,7 +49,7 @@ class CustomerCartController extends Controller
         }
 
         return response()->json([
-            'data' => $customer->cart->products->load('productItem')
+            'data' => $customer->cart->products->load('productItem', 'categories')
         ]);
     }
 
@@ -56,40 +59,43 @@ class CustomerCartController extends Controller
             'action' => 'required',
             'product_id' => 'required',
             'cart_id' => 'required',
+            'size' => 'required',
             'quantity' => 'required',
         ]);
 
         $quantity = $validated['quantity'];
         $action = $validated['action'];
-        $customer = Customer::where('user_id', Auth::user()->id)->first();
+        $customer = $this->getCustomer();
         $product = Product::where('id', $validated['product_id'])->first();
 
         if($action === 'add') {
-            $product->carts()->updateExistingPivot($validated['cart_id'],
-                [
-                    'quantity' => $quantity + 1
-                ]);
+            $product->carts()->wherePivot('cart_id', $validated['cart_id'])
+                ->wherePivot('size', $validated['size'])
+                ->update(['quantity' => $quantity + 1]);
         } else {
-            $product->carts()->updateExistingPivot($validated['cart_id'],
-            [
-                'quantity' => $quantity - 1
-            ]);
+            $product->carts()->wherePivot('cart_id', $validated['cart_id'])
+            ->wherePivot('size', $validated['size'])
+            ->update(['quantity' => $quantity - 1]);
         }
 
         return response()->json([
-            'data' => $customer->cart->products->load('productItem')
+            'data' => $customer->cart->products->load('productItem', 'categories')
         ]);
     }
 
     public function destroy(Product $product, Request $request)
     {
-        $validated = $request->validate(['product_id' => 'required', 'cart_id' => 'required']);
-        // TODO:: delete only specific product size
-        $product->carts()->detach($validated['cart_id']);
-        $customer = Customer::where('user_id', Auth::user()->id)->first();
+        $validated = $request->validate([
+            'product_id' => 'required',
+            'cart_id' => 'required',
+            'size' => 'required'
+        ]);
+        $product->carts()->wherePivot('cart_id', $validated['cart_id'])
+            ->wherePivot('size', $validated['size'])->detach();
 
+        $customer = $this->getCustomer();
         return response()->json([
-            'data' => $customer->cart->products->load('productItem')
+            'data' => $customer->cart->products->load('productItem', 'categories')
         ]);
     }
 }

@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import GuestLayout from '../components/GuestLayout.vue'
+import CheckoutLayout from '../components/CheckoutLayout.vue'
 import ProductShowLoadingSkeleton from '../components/ProductShowLoadingSkeleton.vue'
 import LandingPage from '../views/guest/LandingPage.vue'
 import Signin from '../views/guest/Signin.vue'
@@ -8,6 +9,7 @@ import ForgotPassword from '../views/guest/ForgotPassword.vue'
 import ForgotPasswordReset from '../views/guest/ForgotPasswordReset.vue'
 import Product from '../views/guest/Product.vue'
 import ProductShow from '../views/guest/ProductShow.vue'
+import Cart from '../views/customer/Cart.vue'
 const routes = [
   {
     path: '/',
@@ -22,6 +24,15 @@ const routes = [
       { path: '/:slug' , name: 'Product' , component: Product },
       { path: '/:slug/:name=:sku' , name: 'ProductShow' , component: ProductShow },
       { path: '/skeleton' , name: 'ProductShowLoadingSkeleton' , component: ProductShowLoadingSkeleton },
+
+    ]
+  },
+  {
+    path: '/cart',
+    component : CheckoutLayout,
+    redirect : '/cart',
+    children: [
+      { path: '/cart', name: 'Cart' , component: Cart },
 
     ]
   },

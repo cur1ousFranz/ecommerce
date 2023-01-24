@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!model.errors.product">
     <section>
       <div class="flex flex-col py-6 justify-between px-12 w-full md:flex-row">
         <div class="flex space-x-2 text-gray-600" aria-label="Breadcrumb">
@@ -76,8 +76,8 @@
 
         <div v-else class="w-full px-6 md:w-10/12">
           <div v-if="model.products.productList.length" class="grid gap-y-6 gap-x-1 grid-cols-3 md:grid-cols-4">
-            <router-link :to="{ name : 'ProductShow', params : { slug : slug, name : productNameSlug(product.name), sku : product.product_item.sku }}" @mouseleave="replaceImage(product.id, product.product_item.product_image, 0)"
-            @mouseover="replaceImage(product.id, product.product_item.product_image, 1)" v-for="product in model.products.productList" :key="product.id" class="cursor-pointer mx-2 relative">
+            <router-link :to="{ name : 'ProductShow', params : { slug : slug, name : productNameSlug(product.name), sku : product.product_item.sku }}" @mouseleave="replaceImage(product, 0)"
+            @mouseover="replaceImage(product, 1)" v-for="product in model.products.productList" :key="product.id" class="cursor-pointer mx-2 relative">
               <img :id="'img-default-'+ product.id" src="/img/atc-default.png">
               <div v-if="product.product_item.sale_price" class="absolute mt-2 px-1 text-sm bg-gray-800 text-white">
                 -{{ product.product_item.sale_price }}%
@@ -97,19 +97,17 @@
               <img src="/img/empty-cart.png" class="w-12 md:w-24" alt="">
             </div>
             <h1 class="text-lg text-center text-gray-400 font-bold md:text-2xl ">No products to show</h1>
-            <div class="flex justify-center space-x-2 mt-1 cursor-pointer underline" @click="back()">
-              <span class="mt-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-arrow-return-left" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5z"/>
-              </svg>
-              </span>
-              <h1 class="text-sm text-gray-800 font-bold md:text-lg">Get back</h1>
-            </div>
+            <div class="flex justify-center my-6">
+              <div @click="back()" class="cursor-pointer px-6 py-1 border border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white">
+                GET BACK
+              </div>
+          </div>
           </div>
         </div>
       </div>
     </section>
   </div>
+  <PageNotFound v-else/>
 </template>
 
 <script setup>
@@ -120,6 +118,7 @@ import Loading from '../../components/Loading.vue'
 import Color from '../../components/icon/Color.vue'
 import ProductLoadingSkeleton from '../../components/ProductLoadingSkeleton.vue'
 import AttributeLoadingSkeleton from '../../components/AttributeLoadingSkeleton.vue'
+import PageNotFound from "../../components/error/PageNotFound.vue";
 import store from "../../store";
 
   const route = useRoute()
@@ -143,7 +142,10 @@ import store from "../../store";
       productLoaded : false
     },
     filterProduct : [],
-    search : ''
+    search : '',
+    errors : {
+      product : false
+    }
   })
 
   const attributesLoading = computed(() => store.state.category.attributesLoading)
@@ -154,9 +156,16 @@ import store from "../../store";
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
     if(route.params){
-      await store.dispatch('getCategoryProducts', route.params.slug)
-      model.value.products.productLoaded = true
-      store.dispatch('getCategoryAttributes', route.params.slug)
+      try {
+        await store.dispatch('getCategoryProducts', route.params.slug)
+        model.value.products.productLoaded = true
+        await store.dispatch('getCategoryAttributes', route.params.slug)
+      } catch (error) {
+        if(error.response.status === 404) {
+          model.value.products.productLoaded = true
+          model.value.errors.product = true
+        }
+      }
     }
   })
 
@@ -201,9 +210,9 @@ import store from "../../store";
     return object
   }
 
-  const replaceImage = (id, imageString, index) => {
-    let img = document.getElementById(`img-${id}`)
-    img.src = JsonParse(imageString, index)
+  const replaceImage = (product, index) => {
+    let img = document.getElementById(`img-${product.id}`)
+    img.src = JsonParse(product.product_item.product_image, index)
   }
 
   const defaultImage = (id) => {

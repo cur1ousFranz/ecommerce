@@ -15,6 +15,12 @@ class CustomerProductController extends Controller
         })
         ->first();
 
+        if(!$product) {
+            return response()->json([
+                'error' => 'Product not found!'
+            ], 404);
+        }
+
         return response()->json([
             'data' => $product
         ]);
