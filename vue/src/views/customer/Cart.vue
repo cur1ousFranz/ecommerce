@@ -15,8 +15,15 @@
               </div>
             </div>
             <div class="shadow-sm border p-6 max-h-96 overflow-auto">
+              <!-- <div class="flex space-x-2">
+                <input id="all" type="checkbox" class="w-4 h-4 mt-1 mb-6 accent-gray-800"/>
+                <label for="all" class="uppercase text-gray-800">Select All</label>
+              </div> -->
               <div v-for="product in model.cart.cartData" :key="product.id" class="mb-5">
                 <div class="flex space-x-4">
+                  <div class="flex items-center">
+                    <input :id="product.id" @change="selectProduct(product)" type="checkbox" class="w-4 h-4 mt-1 p-1 accent-gray-800" :checked="product.pivot.checkout === 1 ? true : false"/>
+                  </div>
                   <div class="relative w-1/4">
                     <img @click="showProduct(product)" :src="JSON.parse(product.product_item.product_image)[0]" :alt="product.name" class="cursor-pointer">
                   </div>
@@ -37,8 +44,12 @@
                     <div class="hidden px-4 md:flex md:justify-between">
                       <div class="flex items-center space-x-1">
                         <div>
-                          <h1 class="font-semibold text-sm text-orange-500">₱{{ formatPrice(product) }}</h1>
-                          <h1 v-if="product.product_item.sale_price" class="text-sm line-through text-gray-400 ">₱{{ formatOriginalPrice(product.product_item.price) }}</h1>
+                          <h1 class="font-semibold text-sm text-orange-500">
+                            ₱{{ formatPrice(product) }}
+                          </h1>
+                          <h1 v-if="product.product_item.sale_price" class="text-sm line-through text-gray-400 ">
+                            ₱{{ formatOriginalPrice(product.product_item.price) }}
+                          </h1>
                         </div>
                         <div v-if="product.product_item.sale_price" class="text-xs px-1 bg-gray-800 text-white">
                         -{{ product.product_item.sale_price }}%
@@ -51,7 +62,9 @@
                           <span @click="updateQuantity(product, 'add')" class="px-2 border cursor-pointer hover:border-gray-800">+</span>
                         </div>
                       </div>
-                      <h1 class="font-semibold text-gray-800">Total: ₱{{ totalPriceQuantity(product) }}</h1>
+                      <h1 class="font-semibold text-gray-800">
+                        Total: ₱{{ totalPriceQuantity(product) }}
+                      </h1>
                     </div>
 
                     <h1 @click="removeCartProduct(product)" class="hidden uppercase cursor-pointer text-sm hover:underline md:block">Delete</h1>
@@ -61,7 +74,9 @@
                 <div class="flex justify-between my-4 md:hidden md:justify-between">
                   <div class="flex items-center space-x-1">
                     <div>
-                      <h1 class="font-semibold text-sm text-orange-500">₱{{ formatPrice(product) }}</h1>
+                      <h1 class="font-semibold text-sm text-orange-500">
+                        ₱{{ formatPrice(product) }}
+                      </h1>
                       <h1 v-if="product.product_item.sale_price" class="text-sm line-through text-gray-400 ">₱{{ formatOriginalPrice(product.product_item.price) }}</h1>
                     </div>
                     <div v-if="product.product_item.sale_price" class="text-xs px-1 bg-gray-800 text-white">
@@ -83,10 +98,18 @@
           <div class="w-12/12 md:w-4/12">
             <div class="p-4 h-fit border shadow-sm">
               <h1 class="text-lg font-semibold uppercase text-gray-800">Order Summary</h1>
-              <h1 class="my-3 text-gray-800 space">
-                Subtotal:
-                <span class="my-3 text-end text-3xl font-semibold text-gray-800">
-                  ₱
+              <div class="my-3 flex justify-between">
+                <h1 class=" text-gray-800">
+                  Subtotal:
+                </h1>
+                <span class="text-end text-2xl text-gray-800 md:text-3xl">
+                  ₱{{ model.subTotal.toLocaleString() }}
+                </span>
+              </div>
+              <h1 class="my-1 text-orange-700">
+                You Saved:
+                <span class="my-3 text-end ">
+                  ₱ {{ model.totalDiscount }}
                 </span>
               </h1>
               <div class="uppercase cursor-pointer w-full py-3 my-4 text-center font-bold bg-gray-800 text-white hover:bg-gray-900">
@@ -121,7 +144,9 @@ import store from "../../store";
       cart : {
         cartData : [],
       },
-      productLoaded : false
+      productLoaded : false,
+      subTotal : 0,
+      totalDiscount : 0
     })
 
   watch(() => store.state.cart.data,
@@ -132,6 +157,7 @@ import store from "../../store";
     if(store.state.user.token) {
       await store.dispatch('getCustomerCart')
       model.value.productLoaded = true
+      subTotal()
     }
   })
 
@@ -142,7 +168,7 @@ import store from "../../store";
     return Math.ceil(newPrice).toLocaleString()
   }
 
-  const updateQuantity = (product, action) => {
+  const updateQuantity = async (product, action) => {
     const formData = new FormData()
     formData.append('product_id', product.id)
     formData.append('cart_id', product.pivot.cart_id)
@@ -150,7 +176,8 @@ import store from "../../store";
     formData.append('quantity', product.pivot.quantity)
     formData.append('action', action)
     formData.append('_method', 'put')
-    store.dispatch('addCartProductQuantity', formData)
+    await store.dispatch('addCartProductQuantity', formData)
+    subTotal()
   }
 
   const totalPriceQuantity = (product) => {
@@ -169,6 +196,7 @@ import store from "../../store";
     formData.append('size', product.pivot.size)
     formData.append('_method', 'delete')
     await store.dispatch('deleteCartProduct', formData)
+    subTotal()
   }
 
   const showProduct = (product) => {
@@ -179,6 +207,42 @@ import store from "../../store";
     return name
     .replace(/[^a-zA-Z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
+  }
+
+  const selectProduct = async (product) => {
+    let checkbox = document.getElementById(product.id)
+    const formData = new FormData()
+    formData.append('product_id', product.id)
+    formData.append('cart_id', product.pivot.cart_id)
+    formData.append('size', product.pivot.size)
+    formData.append('_method', 'put')
+    if(checkbox.checked) {
+      formData.append('checkout', 'select')
+    } else {
+      formData.append('checkout', 'unselect')
+    }
+
+    await store.dispatch('updateProductCheckout', formData)
+    subTotal()
+  }
+
+  const subTotal = () => {
+    let total = 0
+    let discount = 0
+    model.value.cart.cartData.forEach(product => {
+      if(product.pivot.checkout == 1) {
+        const price = product.product_item.price
+        const percentage = product.product_item.sale_price / 100
+        const quantity = product.pivot.quantity
+        const newPrice = price - (price * percentage)
+        const result = Math.ceil(newPrice) * quantity
+        total += result
+        discount += ((price * quantity) - result)
+      }
+    });
+
+    model.value.subTotal =+ total
+    model.value.totalDiscount =+ discount
   }
 
   const goHome = () => router.push({ name : 'LandingPage'})

@@ -41,6 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/customer/cart', 'index');
         Route::post('/customer/cart', 'store');
         Route::put('/customer/cart/product/{product}', 'update');
+        Route::put('/customer/cart/product/{product}/checkout', 'updateCheckout');
         Route::delete('/customer/cart/product/{product}', 'destroy');
     });
 

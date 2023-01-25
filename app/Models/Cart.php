@@ -15,7 +15,7 @@ class Cart extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class)->withPivot('size', 'quantity');
+        return $this->belongsToMany(Product::class)->withPivot('size', 'quantity', 'checkout');
     }
 
     public function customer()

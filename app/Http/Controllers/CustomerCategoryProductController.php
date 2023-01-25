@@ -81,11 +81,9 @@ class CustomerCategoryProductController extends Controller
     {
         $validated = $request->validate(['search' => 'required', 'slug' => 'required']);
         $search = $validated['search'];
-        $category = Category::where('slug', $validated['slug'])->first();
-        $products = $category->products->load('productItem');
         $result = [];
 
-        $productList = Product::with('productItem')->whereHas('productItem', function ($query) use ($search) {
+        $productList = Product::with('categories','productItem')->whereHas('productItem', function ($query) use ($search) {
             $query->where('sku', 'like', '%'.$search.'%')
                 ->orWhere('price', 'like', '%'.$search.'%');
             })
@@ -101,21 +99,25 @@ class CustomerCategoryProductController extends Controller
             }
         }
 
-        foreach ($products as $product) {
-            $description = json_decode($product->description, true);
+        $products = Product::with('categories','productItem')->whereHas('categories', function ($query) use ($validated) {
+            $query->where('slug', $validated['slug']);
+        })->get();
+
+        foreach ($products as $prdct) {
+            $description = json_decode($prdct->description, true);
             foreach ($description as $key => $value) {
                 if($key === 'Size') {
                     foreach($value as $size) {
                         if($size['name'] === $search && $size['count'] > 0) {
-                            if(!in_array($product, $result)) {
-                                $result[] = $product;
+                            if(!in_array($prdct, $result)) {
+                                $result[] = $prdct;
                             }
                         }
                     }
                 } else {
-                    if($value == $search) {
-                        if(!in_array($product, $result)) {
-                            $result[] = $product;
+                    if($value === ucwords($search)) {
+                        if(!in_array($prdct, $result)) {
+                            $result[] = $prdct;
                         }
                     }
                 }

@@ -130,12 +130,12 @@ import store from "../../store";
     },
     sizeList : [ 'XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', '1XL', '2XL', '3XL', '4XL', '5XL'],
     colors : [
-      { color : 'yellow', class : 'text-yellow-500', selected : false},  { color : 'green', class : 'text-green-500', selected : false},
-      { color : 'blue', class : 'text-blue-500', selected : false},  { color : 'violet', class : 'text-violet-500', selected : false},
-      { color : 'red', class : 'text-red-500', selected : false},  { color : 'orange', class : 'text-orange-500', selected : false},
-      { color : 'gray', class : 'text-gray-500', selected : false},  { color : 'pink', class : 'text-pink-500', selected : false},
-      { color : 'black', class : 'text-black', selected : false},  { color : 'white', class : 'text-white', selected : false},
-      { color : 'brown', class : 'text-amber-600', selected : false},
+      { color : 'Yellow', class : 'text-yellow-500', selected : false},  { color : 'Green', class : 'text-green-500', selected : false},
+      { color : 'Blue', class : 'text-blue-500', selected : false},  { color : 'Violet', class : 'text-violet-500', selected : false},
+      { color : 'Red', class : 'text-red-500', selected : false},  { color : 'Orange', class : 'text-orange-500', selected : false},
+      { color : 'Gray', class : 'text-gray-500', selected : false},  { color : 'Pink', class : 'text-pink-500', selected : false},
+      { color : 'Black', class : 'text-black', selected : false},  { color : 'White', class : 'text-white', selected : false},
+      { color : 'Brown', class : 'text-amber-600', selected : false},
     ],
     products : {
       productList : [],

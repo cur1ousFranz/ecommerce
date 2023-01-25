@@ -34,6 +34,13 @@ const store = createStore({
   getters: {},
   actions: {
     // PRODUCTS
+    async updateProductCheckout({commit}, formData) {
+      commit('setCustomerCartLoading', true)
+      const res = await axiosClient.post(`/customer/cart/product/${formData.get('product_id')}/checkout`, formData)
+      commit('setCustomerCartLoading', false)
+      commit('setCustomerCart', res.data)
+      return res
+    },
     async deleteCartProduct({commit}, formData) {
       commit('setCustomerCartLoading', true)
       const res = await axiosClient.post(`/customer/cart/product/${formData.get('product_id')}`, formData)

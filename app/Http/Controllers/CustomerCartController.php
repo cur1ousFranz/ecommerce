@@ -44,7 +44,8 @@ class CustomerCartController extends Controller
                 $validated['product_id'],
                 [
                     'size' => $validated['size'],
-                    'quantity' => 1
+                    'quantity' => 1,
+                    'checkout' => true
                 ]);
         }
 
@@ -76,6 +77,33 @@ class CustomerCartController extends Controller
             $product->carts()->wherePivot('cart_id', $validated['cart_id'])
             ->wherePivot('size', $validated['size'])
             ->update(['quantity' => $quantity - 1]);
+        }
+
+        return response()->json([
+            'data' => $customer->cart->products->load('productItem', 'categories')
+        ]);
+    }
+
+    public function updateCheckout(Product $product, Request $request)
+    {
+        $validated = $request->validate([
+            'product_id' => 'required',
+            'size' => 'required',
+            'cart_id' => 'required',
+            'checkout' => 'required',
+        ]);
+
+        $customer = $this->getCustomer();
+        $product = Product::where('id', $validated['product_id'])->first();
+
+        if($validated['checkout'] === 'select') {
+            $product->carts()->wherePivot('cart_id', $validated['cart_id'])
+                ->wherePivot('size', $validated['size'])
+                ->update(['checkout' => 1]);
+        } else {
+            $product->carts()->wherePivot('cart_id', $validated['cart_id'])
+            ->wherePivot('size', $validated['size'])
+            ->update(['checkout' => 0]);
         }
 
         return response()->json([

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->string('size');
             $table->integer('quantity');
+            $table->boolean('checkout');
             $table->timestamps();
         });
     }
