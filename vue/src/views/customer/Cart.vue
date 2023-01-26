@@ -1,10 +1,19 @@
 <template>
   <div>
     <section>
-      <div class="w-11/12 mx-auto py-6 max-h-screen">
+      <div v-if="model.cart.cartData.length && model.productLoaded" class="w-11/12 mx-auto py-6 max-h-screen">
+        <div class="w-full flex space-x-2 justify-center mb-10">
+          <h1 class="text-xs font-semibold text-gray-800 md:text-base">Shopping Cart</h1>
+          <h1 class="text-xs text-gray-800 md:text-base">></h1>
+          <h1 class="text-xs text-gray-800 md:text-base">Place Order</h1>
+          <h1 class="text-xs text-gray-800 md:text-base">></h1>
+          <h1 class="text-xs text-gray-800 md:text-base">Pay</h1>
+          <h1 class="text-xs text-gray-800 md:text-base">></h1>
+          <h1 class="text-xs text-gray-800 md:text-base">Order Complete</h1>
+        </div>
         <div v-if="model.cart.cartData.length" class="flex flex-col space-y-3 md:space-y-0 md:flex-row md:space-x-4">
           <div class="w-12/12 space-y-2 md:w-8/12">
-            <div class="shadow-sm border p-4">
+            <div class="shadow-md p-4">
               <div class="text-lg flex space-x-2 font-semibold uppercase text-gray-800">
                 <span>
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-cart3 cursor-pointer mt-2" viewBox="0 0 16 16">
@@ -14,11 +23,7 @@
                 <h1 class="mt-1">Cart Items</h1>
               </div>
             </div>
-            <div class="shadow-sm border p-6 max-h-96 overflow-auto">
-              <!-- <div class="flex space-x-2">
-                <input id="all" type="checkbox" class="w-4 h-4 mt-1 mb-6 accent-gray-800"/>
-                <label for="all" class="uppercase text-gray-800">Select All</label>
-              </div> -->
+            <div class="shadow-lg p-6 max-h-96 overflow-auto">
               <div v-for="product in model.cart.cartData" :key="product.id" class="mb-5">
                 <div class="flex space-x-4">
                   <div class="flex items-center">
@@ -38,7 +43,7 @@
                         <h1 class="text-sm px-3 w-fit bg-gray-800 text-white">
                           Only {{ product.product_item.qty_stock }} left
                         </h1>
-                        <h1 @click="removeCartProduct(product)" class="uppercase cursor-pointer text-sm hover:underline md:hidden">Delete</h1>
+                        <h1 @click="removeCartProduct(product)" class="uppercase w-fit cursor-pointer text-sm hover:underline md:hidden">Delete</h1>
                       </div>
                     </div>
                     <div class="hidden px-4 md:flex md:justify-between">
@@ -67,7 +72,7 @@
                       </h1>
                     </div>
 
-                    <h1 @click="removeCartProduct(product)" class="hidden uppercase cursor-pointer text-sm hover:underline md:block">Delete</h1>
+                    <h1 @click="removeCartProduct(product)" class="hidden uppercase w-fit cursor-pointer text-sm hover:underline md:block">Delete</h1>
                   </div>
                 </div>
 
@@ -95,8 +100,8 @@
               </div>
             </div>
           </div>
-          <div class="w-12/12 md:w-4/12">
-            <div class="p-4 h-fit border shadow-sm">
+          <div class="w-12/12 space-y-3 md:w-4/12">
+            <div class="p-4 h-fit shadow-md">
               <h1 class="text-lg font-semibold uppercase text-gray-800">Order Summary</h1>
               <div class="my-3 flex justify-between">
                 <h1 class=" text-gray-800">
@@ -112,21 +117,30 @@
                   ₱ {{ model.totalDiscount }}
                 </span>
               </h1>
-              <div class="uppercase cursor-pointer w-full py-3 my-4 text-center font-bold bg-gray-800 text-white hover:bg-gray-900">
+              <div class="uppercase cursor-pointer w-full py-3 my-4 text-center font-bold bg-gray-900 text-white hover:bg-gray-800">
                 Checkout Now
+              </div>
+            </div>
+            <div class="p-4 h-fit shadow-lg">
+              <h1 class="text-lg font-semibold uppercase text-gray-800">We accept</h1>
+              <div class="my-3 grid grid-cols-3 md:grid-cols-4 gap-2">
+                <img src="/img/gcash-logo.webp" class="w-18 h-10" alt="gcash_logo">
+                <img src="/img/paypal-logo.webp" class="w-18 h-10" alt="paypal_logo">
+                <img src="/img/mastercard-logo.webp" class="w-18 h-10" alt="mastercard_logo">
+                <img src="/img/visa-logo.webp" class="w-18 h-10" alt="gcash_logo">
               </div>
             </div>
           </div>
         </div>
-        <div v-if="!model.cart.cartData.length && model.productLoaded" class="shadow-sm py-24 max-h-96 ">
-          <div class="flex justify-center">
-            <img src="/img/empty-cart.png" class="w-6 md:w-16" alt="">
-          </div>
-          <h1 class="text-center text-lg font-semibold text-gray-400 py-2">Shopping Cart is Empty</h1>
-          <div class="flex justify-center my-6">
-            <div @click="goHome()" class="cursor-pointer px-6 py-1 border  bg-gray-800 text-white">
-              SHOP NOW
-            </div>
+      </div>
+      <div v-if="!model.cart.cartData.length && model.productLoaded" class="shadow-sm py-24 max-h-96 ">
+        <div class="flex justify-center">
+          <img src="/img/empty-cart.png" class="w-16" alt="">
+        </div>
+        <h1 class="text-center text-lg font-semibold text-gray-400 py-2">Shopping Cart is Empty</h1>
+        <div class="flex justify-center my-6">
+          <div @click="goHome()" class="cursor-pointer px-6 py-1 border  bg-gray-800 text-white">
+            SHOP NOW
           </div>
         </div>
       </div>
@@ -158,6 +172,8 @@ import store from "../../store";
       await store.dispatch('getCustomerCart')
       model.value.productLoaded = true
       subTotal()
+    } else {
+      model.value.productLoaded = true
     }
   })
 

@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import GuestLayout from '../components/GuestLayout.vue'
-import CheckoutLayout from '../components/CheckoutLayout.vue'
-import ProductShowLoadingSkeleton from '../components/ProductShowLoadingSkeleton.vue'
+import GuestLayout from '../components/layout/GuestLayout.vue'
+import CheckoutLayout from '../components/layout/CheckoutLayout.vue'
 import LandingPage from '../views/guest/LandingPage.vue'
 import Signin from '../views/guest/Signin.vue'
 import Signup from '../views/guest/Signup.vue'
@@ -23,7 +22,6 @@ const routes = [
       { path: '/reset/password/', name: 'ForgotPasswordReset' , component: ForgotPasswordReset },
       { path: '/:slug' , name: 'Product' , component: Product },
       { path: '/:slug/:name=:sku' , name: 'ProductShow' , component: ProductShow },
-      { path: '/skeleton' , name: 'ProductShowLoadingSkeleton' , component: ProductShowLoadingSkeleton },
 
     ]
   },

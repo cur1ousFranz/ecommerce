@@ -14,12 +14,12 @@
               </div>
 
               <button class="px-3 py-2 mt-3 w-full bg-gray-800 text-white hover:bg-gray-700">
-                  <div v-if="loadStatus">
-                    Please wait...
-                  </div>
-                  <div v-else>
-                    Submit
-                  </div>
+                <div v-if="loadStatus">
+                  Please wait...
+                </div>
+                <div v-else>
+                  Submit
+                </div>
               </button>
           </div>
         </form>

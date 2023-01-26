@@ -7,16 +7,18 @@
     </div>
     <nav class="py-4 flex justify-between px-4 border-b md:px-14">
       <div class="flex justify-center">
-        <router-link :to="{ name : 'LandingPage' }" class="text-white cursor-pointer">
-          <img src="/img/nav-logo.png" class="w-24" alt="" oncontextmenu="return false;">
+        <router-link :to="{ name : 'LandingPage' }" class="cursor-pointer">
+          <img src="/img/nav-logo.png" class="w-16 mt-2" alt="" oncontextmenu="return false;">
         </router-link>
       </div>
 
-      <div class="hidden space-x-3 relative md:flex">
-        <div id="small-banner-bg" class="px-12 mt-2 bg-slate-100">
-          <h1 id="small-banner" class="text-end text-red-500 transition duration-500 ease-in-out">Free Standard Shipping!</h1>
+      <div class="flex space-x-6 relative">
+        <div id="small-banner-bg" class="hidden  px-12 mt-2 bg-slate-100 md:block">
+          <h1 id="small-banner" class="text-end text-red-500 transition duration-500 ease-in-out">
+            Free Standard Shipping!
+          </h1>
         </div>
-        <div class="relative">
+        <div class="hidden relative md:block">
           <div @mouseenter="showCartDropdown" class="relative">
             <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-cart3 cursor-pointer mt-2" viewBox="0 0 16 16">
             <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
@@ -35,7 +37,7 @@
                 </span>
                 <h1 class="text-lg font-semibold text-gray-800">ATC</h1>
               </div>
-              <div class="rounded-md shadow-xs max-h-96 shadow-xl bg-white overflow-auto">
+              <div class="rounded-md shadow-xs max-h-96 shadow-xl overflow-auto bg-white">
                 <div class="h-full w-full px-2 py-2">
                   <div v-if="model.cart.cartData.length" class="pt-2 space-y-2">
                     <div class="flex space-x-2 border-b py-2" v-for="product in model.cart.cartData" :key="product.id">
@@ -83,14 +85,10 @@
         </div>
         <!-- MENU -->
         <div v-if="authenticated" class="relative inline-block text-left">
-          <div>
-            <span class="rounded-md shadow-sm">
-              <button @click="showDropdown" type="button" class="inline-flex justify-center w-full rounded-full border-gray-300 px-3 py-1 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition duration-150 ease-in-out">
-                <img src="/img/profile-default.png" class="w-7" alt="">
-              </button>
-            </span>
+          <div @click="showDropdownMobile" @mouseenter="showDropdown" class="mt-1 cursor-pointer">
+            <img src="/img/profile-default.png" class="w-7" alt="">
           </div>
-          <div v-if="show" class="origin-top-right absolute right-0 mt-2 w-56 z-10 rounded-md shadow-lg">
+          <div @mouseleave="hideDropdown" v-if="show" class="origin-top-right absolute right-0 mt-2 w-56 z-10 rounded-md shadow-lg">
             <div class="rounded-md bg-white shadow-xs text-center">
               <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                 <a href="#" class="block px-4 py-2 cursor-pointer text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Profile</a>
@@ -102,33 +100,57 @@
         <router-link v-else :to="{ name : 'Signin'}" class="px-3 py-2 hover:text-gray-600">Sign In</router-link>
       </div>
 
-      <div id="nav-icon1" class="md:hidden">
-          <span></span>
-          <span></span>
-          <span></span>
-      </div>
     </nav>
+    <pre>{{ model.products }}</pre>
     <main class="max-w-screen-xl mx-auto">
       <router-view></router-view>
     </main>
+
+    <div class="w-full py-2 flex justify-around fixed bottom-0 border-t border-gray-300 bg-white md:hidden">
+      <router-link :to="{ name : 'Cart'}" class="relative">
+        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-cart3 cursor-pointer" viewBox="0 0 16 16">
+          <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+          </svg>
+          <span v-if="model.cart.cartData.length" class="absolute text-xs ml-3 -mt-8 rounded-full font-bold px-2 py-1 text-white bg-red-600">
+              {{ model.cart.cartData.length }}
+          </span>
+      </router-link>
+
+      <span class="rounded-md shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-bag-check" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+          <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+        </svg>
+      </span>
+
+    </div>
     <!-- <Footer/> -->
   </div>
 </template>
 
 <script setup>
-import Footer from './Footer.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import store from '../store'
+import store from '../../store'
 
   const router = useRouter()
   const show = ref(false)
   const showCart = ref(false)
   const alternate = ref(false)
   const authenticated = ref(false)
+
   const showDropdown = () => {
-    show.value = !show.value
+    showCart.value = false
+    show.value = true
   }
+  const hideDropdown = () => show.value = false
+  const showDropdownMobile = () => show.value = !show.value
+
+  const showCartDropdown = () => {
+    show.value = false
+    showCart.value = true
+  }
+  const hideCartDropdown = () => showCart.value = false
 
   const model = ref({
     cart : {
@@ -145,9 +167,6 @@ import store from '../store'
   let smallBanner
   let smallBannerBg
   onMounted(async () => {
-    let nav = document.querySelector('#nav-icon1')
-    nav.addEventListener('click', () => nav.classList.toggle('open'))
-
     smallBanner = document.querySelector('#small-banner')
     smallBannerBg = document.querySelector('#small-banner-bg')
 
@@ -158,6 +177,7 @@ import store from '../store'
     if(store.state.user.token) {
       store.dispatch('getCustomerCart')
     }
+
   })
 
   setInterval(() => {
@@ -182,9 +202,6 @@ import store from '../store'
     await store.dispatch('signOutUser')
     window.location = '/'
   }
-
-  const showCartDropdown = () => showCart.value = true
-  const hideCartDropdown = () => showCart.value = false
 
   const formatPrice = (product) => {
     const price = product.product_item.price
@@ -235,74 +252,6 @@ import store from '../store'
 </script>
 
 <style>
-#nav-icon1 {
-  width: 50px;
-  height: 5px;
-  margin-top: 5px;
-  position: relative;
-  -webkit-transform: rotate(0deg);
-  -moz-transform: rotate(0deg);
-  -o-transform: rotate(0deg);
-  transform: rotate(0deg);
-  -webkit-transition: .5s ease-in-out;
-  -moz-transition: .5s ease-in-out;
-  -o-transition: .5s ease-in-out;
-  transition: .5s ease-in-out;
-  cursor: pointer;
-}
-
-#nav-icon1 span {
-  display: block;
-  position: absolute;
-  height: 5px;
-  width: 75%;
-  background: #231f20;
-  border-radius: 9px;
-  opacity: 1;
-  left: 0;
-  -webkit-transform: rotate(0deg);
-  -moz-transform: rotate(0deg);
-  -o-transform: rotate(0deg);
-  transform: rotate(0deg);
-  -webkit-transition: .25s ease-in-out;
-  -moz-transition: .25s ease-in-out;
-  -o-transition: .25s ease-in-out;
-  transition: .25s ease-in-out;
-}
-
-#nav-icon1 span:nth-child(1) {
-  top: 0px;
-}
-
-#nav-icon1 span:nth-child(2) {
-  top: 9px;
-}
-
-#nav-icon1 span:nth-child(3) {
-  top: 18px;
-}
-
-#nav-icon1.open span:nth-child(1) {
-  top: 9px;
-  -webkit-transform: rotate(135deg);
-  -moz-transform: rotate(135deg);
-  -o-transform: rotate(135deg);
-  transform: rotate(135deg);
-}
-
-#nav-icon1.open span:nth-child(2) {
-  opacity: 0;
-  left: -60px;
-}
-
-#nav-icon1.open span:nth-child(3) {
-  top: 9px;
-  -webkit-transform: rotate(-135deg);
-  -moz-transform: rotate(-135deg);
-  -o-transform: rotate(-135deg);
-  transform: rotate(-135deg);
-}
-
 ::-webkit-scrollbar {
   width: 0.4em;
   background-color: #F5F5F5;
@@ -311,6 +260,10 @@ import store from '../store'
 /* Webkit browsers */
 ::-webkit-scrollbar-thumb {
   background-color: #c2bdbd;
+}
+
+.hide-background {
+  background-color: transparent;
 }
 
 </style>

@@ -7,6 +7,15 @@ use Illuminate\Http\Request;
 
 class CustomerProductController extends Controller
 {
+
+    public function index()
+    {
+        $products = Product::with('productItem', 'categories')->get();
+        return response()->json([
+            'data' => $products
+        ]);
+    }
+
     public function show(Request $request)
     {
         $validated = $request->validate(['sku' => 'required']);

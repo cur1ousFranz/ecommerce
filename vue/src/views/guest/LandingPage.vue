@@ -42,7 +42,6 @@
         </div>
       </div>
     </section>
-
     <!-- NEW ARRIVALS -->
     <section>
       <div class="px-6 my-32 md:px-12">
@@ -54,12 +53,10 @@
           </span>
           NEW ARRIVALS
         </h1>
-        <div class="grid grid-cols-2 md:grid-cols-5">
-          <div class="shadow-md hover:shadow-xl cursor-pointer mx-2 my-3">
-            <img src="/img/1.webp" alt="">
-            <h1 class="text-lg font-semibold py-2 px-2" style="letter-spacing: 1px">$ 10.99</h1>
-          </div>
-        </div>
+
+        <ProductLoadingSkeleton v-if="productsLoading"/>
+        <ShowProducts :products="model.products"/>
+
       </div>
     </section>
   </div>
@@ -67,16 +64,19 @@
 
 <script setup>
 import { ref } from "@vue/reactivity";
-import { computed, onMounted } from "@vue/runtime-core";
+import { computed, onMounted, watch } from "@vue/runtime-core";
 import store from "../../store";
-import ErrorDialog from '../../components/ErrorDialog.vue'
+import ErrorDialog from '../../components/error/ErrorDialog.vue'
 import ProductLink from '../../components/product/ProductLink.vue'
+import ProductLoadingSkeleton from '../../components/product/ProductLoadingSkeleton.vue'
+import ShowProducts from '../../components/product/ShowProducts.vue'
 
   const model = ref({
     categories : {
       main : ['Women', 'Men', 'Kids'],
       selectedCategory : 'Women'
     },
+    products : [],
     errors : {
       connection : false
     }
@@ -85,16 +85,22 @@ import ProductLink from '../../components/product/ProductLink.vue'
   const womenCategory = computed(() => store.state.category.women)
   const menCategory = computed(() => store.state.category.men)
   const kidsCategory = computed(() => store.state.category.kids)
+  const productsLoading = computed(() => store.state.products.allProductsLoading)
 
   onMounted(async () => {
     try {
       await store.dispatch('getWomenCategory')
       await store.dispatch('getMenCategory')
       await store.dispatch('getKidsCategory')
+      await store.dispatch('getAllProducts')
     } catch (error) {
       model.value.errors.connection = true
     }
   })
+
+  watch(() => store.state.products.allProducts,
+    (newVal, oldVal) => model.value.products = newVal
+  )
 
   const selectCategory = (category) => {
     model.value.categories.selectedCategory = category

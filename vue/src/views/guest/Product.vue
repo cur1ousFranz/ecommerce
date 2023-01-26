@@ -28,7 +28,7 @@
           </form>
         </div>
       </div>
-    </section>
+   </section>
 
     <section>
       <div class="my-6 space-x-4 flex">
@@ -75,23 +75,8 @@
         </div>
 
         <div v-else class="w-full px-6 md:w-10/12">
-          <div v-if="model.products.productList.length" class="grid gap-y-6 gap-x-1 grid-cols-3 md:grid-cols-4">
-            <router-link :to="{ name : 'ProductShow', params : { slug : slug, name : productNameSlug(product.name), sku : product.product_item.sku }}" @mouseleave="replaceImage(product, 0)"
-            @mouseover="replaceImage(product, 1)" v-for="product in model.products.productList" :key="product.id" class="cursor-pointer mx-2 relative">
-              <img :id="'img-default-'+ product.id" src="/img/atc-default.png">
-              <div v-if="product.product_item.sale_price" class="absolute mt-2 px-1 text-sm bg-gray-800 text-white">
-                -{{ product.product_item.sale_price }}%
-              </div>
-              <img :id="'img-'+ product.id" :src="JsonParse(product.product_item.product_image)" @load="defaultImage(product.id)" class="hidden object-contain">
-              <h1 class="text-sm py-1 px-1 text-gray-600" style="width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ product.name }}</h1>
-              <div class="flex justify-start">
-                <h1 class="font-semibold px-2 text-orange-500 text-sm">
-                  ₱ {{ formatPrice(product.product_item.price, product.product_item.sale_price) }}
-                </h1>
-                <h1 v-if="product.product_item.sale_price" class="font-semibold text-gray-400 line-through text-xs">₱ {{ formatOriginalPrice(product.product_item.price) }}</h1>
-              </div>
-            </router-link>
-          </div>
+          <ShowProducts :products="model.products.productList" :slug="slug"/>
+
           <div v-if="!model.products.productList.length && model.products.productLoaded" class="py-32">
             <div class="flex justify-center">
               <img src="/img/empty-cart.png" class="w-12 md:w-24" alt="">
@@ -101,7 +86,7 @@
               <div @click="back()" class="cursor-pointer px-6 py-1 border border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white">
                 GET BACK
               </div>
-          </div>
+            </div>
           </div>
         </div>
       </div>
@@ -116,9 +101,10 @@ import { useRoute, useRouter } from "vue-router";
 import Checkbox from "../../components/form/Checkbox.vue";
 import Loading from '../../components/Loading.vue'
 import Color from '../../components/icon/Color.vue'
-import ProductLoadingSkeleton from '../../components/ProductLoadingSkeleton.vue'
-import AttributeLoadingSkeleton from '../../components/AttributeLoadingSkeleton.vue'
+import ProductLoadingSkeleton from '../../components/product/ProductLoadingSkeleton.vue'
+import AttributeLoadingSkeleton from '../../components/product/AttributeLoadingSkeleton.vue'
 import PageNotFound from "../../components/error/PageNotFound.vue";
+import ShowProducts from '../../components/product/ShowProducts.vue'
 import store from "../../store";
 
   const route = useRoute()
@@ -188,38 +174,9 @@ import store from "../../store";
       .join(" ");
   }
 
-  const productNameSlug = (name) => {
-    return name
-    .replace(/[^a-zA-Z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-  }
-
-  const formatPrice = (price, sale) => {
-    let percentage = sale/100
-    let newPrice = price - (price * percentage)
-    return Math.ceil(newPrice).toLocaleString()
-  }
-
-  const formatOriginalPrice = (price, sale) => {
-    return price.toLocaleString()
-  }
-
-  const JsonParse = (imageString, index = 0) => JSON.parse(imageString)[index]
   const sort = (object) => {
     object.sort((a, b) => a.name.localeCompare(b.name));
     return object
-  }
-
-  const replaceImage = (product, index) => {
-    let img = document.getElementById(`img-${product.id}`)
-    img.src = JsonParse(product.product_item.product_image, index)
-  }
-
-  const defaultImage = (id) => {
-    let imgDefault = document.getElementById(`img-default-${id}`)
-    let img = document.getElementById(`img-${id}`)
-    imgDefault.classList.add('hidden')
-    img.classList.remove('hidden')
   }
 
   const selectPrice = async () => {

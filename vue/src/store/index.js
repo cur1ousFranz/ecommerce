@@ -23,7 +23,9 @@ const store = createStore({
     },
     products : {
       product : [],
-      loading : false
+      loading : false,
+      allProducts : [],
+      allProductsLoading : false,
     },
     cart : {
       data : [],
@@ -74,6 +76,13 @@ const store = createStore({
       const res = await axiosClient.post(`/customer/product`, formData)
       commit('setProductLoading', false)
       commit('setProduct', res.data)
+      return res
+    },
+    async getAllProducts({commit}) {
+      commit('setAllProductsLoading', true)
+      const res = await axiosClient.get(`/customer/product/all`)
+      commit('setAllProductsLoading', false)
+      commit('setAllProducts', res.data)
       return res
     },
     async searchProduct({commit}, formData) {
@@ -182,6 +191,12 @@ const store = createStore({
     },
     setProduct : (state, product) => {
       state.products.product = product.data
+    },
+    setAllProductsLoading : (state, loading) => {
+      state.products.allProductsLoading = loading
+    },
+    setAllProducts : (state, products) => {
+      state.products.allProducts = products.data
     },
     setAttributesLoading : (state, loading) => {
       state.category.attributesLoading = loading

@@ -65,6 +65,7 @@ Route::controller(CustomerCategoryAttributeController::class)->group(function(){
 });
 
 Route::controller(CustomerProductController::class)->group(function(){
+    Route::get('/customer/product/all', 'index');
     Route::get('/customer/product', 'show');
 });
 
