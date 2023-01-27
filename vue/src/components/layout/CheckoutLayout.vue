@@ -3,7 +3,7 @@
     <nav class="py-4 flex justify-between px-4 border-b md:px-14">
       <div class="flex justify-center">
         <router-link :to="{ name : 'LandingPage' }" class="cursor-pointer">
-          <img src="/img/nav-logo.png" class="w-24" alt="" oncontextmenu="return false;">
+          <img src="/img/nav-logo.png" class="w-16 mt-2" alt="" oncontextmenu="return false;">
         </router-link>
       </div>
       <div class="flex justify-center">

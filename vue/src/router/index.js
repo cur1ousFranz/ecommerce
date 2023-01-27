@@ -9,6 +9,7 @@ import ForgotPasswordReset from '../views/guest/ForgotPasswordReset.vue'
 import Product from '../views/guest/Product.vue'
 import ProductShow from '../views/guest/ProductShow.vue'
 import Cart from '../views/customer/Cart.vue'
+import Profile from '../views/customer/Profile.vue'
 const routes = [
   {
     path: '/',
@@ -22,6 +23,7 @@ const routes = [
       { path: '/reset/password/', name: 'ForgotPasswordReset' , component: ForgotPasswordReset },
       { path: '/:slug' , name: 'Product' , component: Product },
       { path: '/:slug/:name=:sku' , name: 'ProductShow' , component: ProductShow },
+      { path: '/user/profile' , name: 'Profile' , component: Profile },
 
     ]
   },

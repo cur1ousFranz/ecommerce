@@ -77,7 +77,7 @@
                 </div>
               </div>
               <router-link :to="{ name : 'Cart'}">
-                <div v-if="model.cart.cartData.length" class="py-3 font-semibold cursor-pointer w-full text-center text-white bg-gray-800 hover:bg-gray-900">ViEW CART ({{ model.cart.cartData.length }})
+                <div v-if="model.cart.cartData.length" class="py-3 font-semibold cursor-pointer w-full text-center text-white bg-gray-800 hover:bg-gray-900">VIEW CART ({{ model.cart.cartData.length }})
                 </div>
               </router-link>
             </div>
@@ -88,11 +88,15 @@
           <div @click="showDropdownMobile" @mouseenter="showDropdown" class="mt-1 cursor-pointer">
             <img src="/img/profile-default.png" class="w-7" alt="">
           </div>
-          <div @mouseleave="hideDropdown" v-if="show" class="origin-top-right absolute right-0 mt-2 w-56 z-10 rounded-md shadow-lg">
-            <div class="rounded-md bg-white shadow-xs text-center">
+          <div @mouseleave="hideDropdown" v-if="show" class="origin-top-right absolute right-0 mt-2 w-44 z-10 rounded-md shadow-lg">
+            <div class="rounded-md bg-white shadow-xs text-start px-2">
               <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                <a href="#" class="block px-4 py-2 cursor-pointer text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Profile</a>
-                <a @click="signOut" class="block px-4 py-2 cursor-pointer text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Logout</a>
+                <router-link :to="{ name : 'Profile'}" href="#" class="block px-4 py-2 cursor-pointer text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">
+                  My Profile
+                </router-link>
+                <a href="#" class="block px-4 py-2 cursor-pointer text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">My Orders</a>
+                <a href="#" class="block px-4 py-2 cursor-pointer text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">My Purchase</a>
+                <a @click="signOut" class="block px-4 py-2 cursor-pointer text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Signout</a>
               </div>
             </div>
           </div>

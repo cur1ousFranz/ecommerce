@@ -27,7 +27,7 @@
               <div v-for="product in model.cart.cartData" :key="product.id" class="mb-5">
                 <div class="flex space-x-4">
                   <div class="flex items-center">
-                    <input :id="product.id" @change="selectProduct(product)" type="checkbox" class="w-4 h-4 mt-1 p-1 accent-gray-800" :checked="product.pivot.checkout === 1 ? true : false"/>
+                    <input :id="`${product.id}-${product.pivot.size}`" @change="selectProduct(product)" type="checkbox" class="w-4 h-4 mt-1 p-1 accent-gray-800" :checked="product.pivot.checkout == 1 ? true : false"/>
                   </div>
                   <div class="relative w-1/4">
                     <img @click="showProduct(product)" :src="JSON.parse(product.product_item.product_image)[0]" :alt="product.name" class="cursor-pointer">
@@ -226,7 +226,7 @@ import store from "../../store";
   }
 
   const selectProduct = async (product) => {
-    let checkbox = document.getElementById(product.id)
+    let checkbox = document.getElementById(`${product.id}-${product.pivot.size}`)
     const formData = new FormData()
     formData.append('product_id', product.id)
     formData.append('cart_id', product.pivot.cart_id)

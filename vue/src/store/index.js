@@ -30,11 +30,31 @@ const store = createStore({
     cart : {
       data : [],
       loading : false
+    },
+    customer : {
+      data : [],
+      loading : false,
     }
 
   },
   getters: {},
   actions: {
+    // CUSTOMER
+    async changePassword({commit}, formData) {
+      const res = await axiosClient.post(`/customer/change/password`, formData)
+      return res
+    },
+    async setPersonalDetails({commit}, formData) {
+      const res = await axiosClient.post(`/customer/personal/details`, formData)
+      return res
+    },
+    async getCustomerProfile({commit}) {
+      commit('setCustomerProfileLoading', true)
+      const res = await axiosClient.get(`/customer/details`)
+      commit('setCustomerProfileLoading', false)
+      commit('setCustomerProfile', res.data)
+      return res
+    },
     // PRODUCTS
     async updateProductCheckout({commit}, formData) {
       commit('setCustomerCartLoading', true)
@@ -180,6 +200,12 @@ const store = createStore({
   },
   mutations: {
     // CUSTOMER
+    setCustomerProfileLoading : (state, loading) => {
+      state.customer.loading = loading
+    },
+    setCustomerProfile : (state, profile) => {
+      state.customer.data = profile.data
+    },
     setCustomerCartLoading : (state, loading) => {
       state.cart.loading = loading
     },

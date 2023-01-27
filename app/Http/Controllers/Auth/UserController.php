@@ -92,6 +92,7 @@ class UserController extends Controller
 
         $customer = $user->customers()->create();
         $customer->cart()->create();
+        $customer->address()->create();
 
         $data = array('code' => $code);
         Mail::send('email.email-content', $data, function($message) use ($user){

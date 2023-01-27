@@ -100,7 +100,9 @@ class CustomerCartController extends Controller
             $product->carts()->wherePivot('cart_id', $validated['cart_id'])
                 ->wherePivot('size', $validated['size'])
                 ->update(['checkout' => 1]);
-        } else {
+        }
+
+        if($validated['checkout'] === 'unselect') {
             $product->carts()->wherePivot('cart_id', $validated['cart_id'])
             ->wherePivot('size', $validated['size'])
             ->update(['checkout' => 0]);

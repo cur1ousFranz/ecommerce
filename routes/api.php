@@ -10,6 +10,7 @@ use App\Http\Controllers\CustomerCartController;
 use App\Http\Controllers\CustomerCategoryAttributeController;
 use App\Http\Controllers\CustomerCategoryController;
 use App\Http\Controllers\CustomerCategoryProductController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerProductController;
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -43,6 +44,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/customer/cart/product/{product}', 'update');
         Route::put('/customer/cart/product/{product}/checkout', 'updateCheckout');
         Route::delete('/customer/cart/product/{product}', 'destroy');
+    });
+
+    Route::controller(CustomerController::class)->group(function(){
+        Route::get('/customer/details', 'index');
+        Route::post('/customer/personal/details', 'store');
+        Route::post('/customer/change/password', 'updatePassword');
+
     });
 
 });
