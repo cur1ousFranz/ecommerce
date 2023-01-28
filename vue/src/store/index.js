@@ -40,6 +40,11 @@ const store = createStore({
   getters: {},
   actions: {
     // CUSTOMER
+    async setCustomerAddress({commit}, formData) {
+      const res = await axiosClient.post(`/customer/address`, formData)
+      commit('setCustomerProfile', res.data)
+      return res
+    },
     async changePassword({commit}, formData) {
       const res = await axiosClient.post(`/customer/change/password`, formData)
       return res

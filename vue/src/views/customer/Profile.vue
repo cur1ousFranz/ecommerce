@@ -47,7 +47,9 @@
                 </div>
               </div>
               <div class="flex justify-end py-2">
-                <button @click="savePersonal" class="px-4 py-1 bg-gray-700 hover:bg-gray-900 text-white">Save</button>
+                <button @click="savePersonal" class="px-4 py-1 bg-gray-700 hover:bg-gray-900 text-white">
+                  Save
+                </button>
               </div>
             </div>
 
@@ -62,39 +64,50 @@
 
             <div class="shadow-md px-6 py-4">
               <h1 class="font-semibold text-2xl text-gray-800">Address Information</h1>
-              <div class="flex space-x-6 py-4">
-                <div class="w-1/2">
-                  <label class="text-sm">Country</label>
-                  <input type="text" class="w-full py-1 border px-2"/>
+              <div v-if="model.details.customer_address.country && model.details.addressLoaded" class="border border-l-0 border-gray-300 shadow-sm w-2/3 my-3 flex space-x-4">
+                <div class="w-fit h-full space-y-2">
+                  <div class="px-0.5 py-3 bg-blue-700"></div>
+                  <div class="px-0.5 py-3 bg-red-600"></div>
+                  <div class="px-0.5 py-3 bg-blue-700"></div>
+                  <div class="px-0.5 py-3 bg-red-600"></div>
+                  <div class="px-0.5 py-3 bg-blue-700"></div>
                 </div>
-                <div class="w-1/2">
-                  <label class="text-sm">Province</label>
-                  <input type="text" class="w-full py-1 border px-2"/>
-                </div>
-              </div>
-              <div class="flex space-x-6">
-                <div class="w-1/2">
-                  <label class="text-sm">City</label>
-                  <input type="text" class="w-full py-1 border px-2"/>
-                </div>
-                <div class="w-1/2">
-                  <label class="text-sm">Street</label>
-                  <input type="text" class="w-full py-1 border px-2"/>
-                </div>
-              </div>
-              <div class="flex space-x-6 pt-4">
-                <div class="w-1/2">
-                  <label class="text-sm">NOTE</label>
-                  <input type="text" class="w-full py-1 border px-2" placeholder="Phase/Unit/Floor, Landmark"/>
-                </div>
-                <div class="w-1/2">
-                  <label class="text-sm">Zipcode</label>
-                  <input type="text" class="w-full py-1 border px-2"/>
+                <div class="py-2 px-3">
+                  <div class="flex space-x-4">
+                    <h1 class="text-gray-800">{{ model.details.first_name }}</h1>
+                    <h1 class="text-sm text-gray-800">{{ model.details.phone_number }}</h1>
+                  </div>
+                  <h1 class="text-sm mt-6 text-gray-800">
+                    {{ model.details.customer_address.address_line1 }}
+                  </h1>
+                  <h1 class="text-sm text-gray-800">
+                    {{ model.details.customer_address.note }}
+                  </h1>
+                  <h1 class="text-sm my-2 text-gray-800">
+                    {{ model.details.customer_address.barangay }} {{ model.details.customer_address.city }}, {{ model.details.customer_address.province }},  {{ model.details.customer_address.country }} {{ model.details.customer_address.zipcode }}
+                  </h1>
                 </div>
               </div>
-              <div class="flex justify-end py-2">
-                <button class="px-4 py-1 bg-gray-700 hover:bg-gray-900 text-white">Save</button>
+              <div v-else>
+                <h1 class="py-4 text-center text-gray-600">No address yet.</h1>
               </div>
+
+              <div v-if="!model.details.customer_address.country && model.details.addressLoaded" class="flex justify-end py-2">
+                <button @click="showAddressModal" class="uppercase px-4 py-1 flex bg-gray-700 hover:bg-gray-900 text-white">
+                  <span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                      <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                    </svg>
+                  </span>
+                  Address
+                </button>
+              </div>
+              <div v-else class="flex justify-end py-2">
+                <button class="uppercase px-4 py-1 flex bg-gray-700 hover:bg-gray-900 text-white">
+                  Update
+                </button>
+              </div>
+
             </div>
           </div>
 
@@ -122,17 +135,71 @@
             </div>
           </div>
         </div>
+
       </div>
     </section>
+
+    <Modal v-show="isAddressModalVisible" @closeModal="closeAddressModal" @confirmModal="confirmAddressModal">
+      <template v-slot:header>
+        <h1 class="font-semibold text-2xl text-gray-800">Add address</h1>
+      </template>
+
+      <template v-slot:body>
+        <div class="w-full px-4">
+          <div class="pt-4">
+            <label class="text-sm">Country</label>
+            <input v-model="model.address.country" type="text" class="w-full py-1 border px-2" disabled/>
+          </div>
+          <div class="flex space-x-2 pt-4">
+            <div class="w-full">
+              <label class="text-sm">Province</label>
+              <select @change="selectProvince" id="province" :class="model.errors.province ? 'w-full py-1 border border-red-500 focus:outline-red-500 px-2' : 'w-full py-1 border px-2'"></select>
+              <p class="text-sm absolute text-red-500">{{ model.errors.province }}</p>
+            </div>
+            <div class="w-full">
+              <label class="text-sm">City</label>
+              <select @change="selectCity" id="city" :class="model.errors.city ? 'w-full py-1 border border-red-500 focus:outline-red-500 px-2' : 'w-full py-1 border px-2'"></select>
+              <p class="text-sm absolute text-red-500">{{ model.errors.city }}</p>
+            </div>
+          </div>
+          <div class="flex space-x-2 pt-4">
+            <div class="w-full">
+              <label class="text-sm">Barangay</label>
+              <select @change="selectBarangay" id="barangay" :class="model.errors.barangay ? 'w-full py-1 border border-red-500 focus:outline-red-500 px-2' : 'w-full py-1 border px-2'"></select>
+              <p class="text-sm absolute text-red-500">{{ model.errors.barangay }}</p>
+            </div>
+            <div class="w-full">
+              <label class="text-sm">Address Line 1</label>
+              <input v-model="model.address.address_line1" type="text" :class="model.errors.address_line1 ? 'w-full py-1 border border-red-500 focus:outline-red-500 px-2' : 'w-full py-1 border px-2'"/>
+              <p class="text-sm absolute text-red-500">{{ model.errors.address_line1 }}</p>
+            </div>
+          </div>
+          <div class="flex space-x-2 pt-4">
+            <div class="w-full">
+              <label class="text-sm">NOTE (Optional)</label>
+              <input v-model="model.address.note" type="text" class="w-full py-1 border px-2" placeholder="Phase/Unit/Floor, Landmark"/>
+            </div>
+            <div class="w-full">
+              <label class="text-sm">Zipcode</label>
+              <input v-model="model.address.zipcode" type="text" :class="model.errors.zipcode ? 'w-full py-1 border border-red-500 focus:outline-red-500 px-2' : 'w-full py-1 border px-2'"/>
+              <p class="text-sm absolute text-red-500">{{ model.errors.zipcode }}</p>
+            </div>
+          </div>
+        </div>
+      </template>
+    </Modal>
+
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "@vue/runtime-core";
+import { computed, onMounted, ref, watch } from "@vue/runtime-core";
 import { useRouter } from "vue-router";
 import store from "../../store";
 import alert from "../../alert";
+import Modal from '../../components/Modal.vue'
 
+  const isAddressModalVisible = ref(false)
   const router = useRouter()
   const model = ref({
     details : {
@@ -140,10 +207,21 @@ import alert from "../../alert";
       last_name : '',
       gender : '',
       birth_date : '',
+      phone_number : '',
       current_password : '',
       password : '',
       password_confirmation : '',
-
+      customer_address : [],
+      addressLoaded : false
+    },
+    address : {
+      country : 'Philippines',
+      province : '',
+      city : '',
+      barangay : '',
+      address_line1 : '',
+      zipcode : '',
+      note : '',
     },
     toggle : {
       information : true,
@@ -159,6 +237,11 @@ import alert from "../../alert";
       birth_date : '',
       current_password : '',
       password : '',
+      province : '',
+      city : '',
+      barangay : '',
+      address_line1 : '',
+      zipcode : '',
 
     }
   })
@@ -175,9 +258,16 @@ import alert from "../../alert";
       model.value.details.last_name = profile.last_name
       model.value.details.gender = profile.gender
       model.value.details.birth_date = profile.birth_date
+      model.value.details.phone_number = profile.phone_number
+      model.value.details.customer_address = profile.address
+      model.value.details.addressLoaded = true
     }
 
   })
+
+  watch(() => store.state.customer.data,
+  (newVal, oldVal) => model.value.details.customer_address = newVal.address
+  )
 
   const savePersonal = async () => {
     model.value.errors.first_name = ''
@@ -261,6 +351,120 @@ import alert from "../../alert";
     }
 
   }
+
+  const showAddressModal = () => isAddressModalVisible.value = true
+  const closeAddressModal = () => isAddressModalVisible.value = false
+  const confirmAddressModal = async () => {
+    model.value.errors.province = ''
+    model.value.errors.city = ''
+    model.value.errors.barangay = ''
+    model.value.errors.address_line1 = ''
+    model.value.errors.zipcode = ''
+
+    const country = model.value.address.country
+    const province = model.value.address.province
+    const city = model.value.address.city
+    const barangay = model.value.address.barangay
+    const address_line1 = model.value.address.address_line1
+    const zipcode = model.value.address.zipcode
+    const note = model.value.address.note
+
+    let provinceSelected = false
+    let citySelected = false
+    let barangaySelected = false
+    let addressLineSelected = false
+    let zipcodeSelected = false
+
+    if(!province) {
+      model.value.errors.province = 'Province is required'
+    } else {
+      provinceSelected = true
+    }
+
+    if(!city) {
+      model.value.errors.city = 'City is required'
+    } else {
+      citySelected = true
+    }
+
+    if(!barangay) {
+      model.value.errors.barangay = 'Barangay is required'
+    } else {
+      barangaySelected = true
+    }
+
+    if(!address_line1) {
+      model.value.errors.address_line1 = 'Address Line is required'
+    } else {
+      addressLineSelected = true
+    }
+
+    if(!zipcode) {
+      model.value.errors.zipcode = 'Zipcode is required'
+    } else {
+      zipcodeSelected = true
+    }
+
+    if(provinceSelected && citySelected && barangaySelected && addressLineSelected && zipcodeSelected) {
+      try {
+        const formData = new FormData()
+        formData.append('country', country)
+        formData.append('province', province)
+        formData.append('city', city)
+        formData.append('barangay', barangay)
+        formData.append('address_line1', address_line1)
+        formData.append('zipcode', zipcode)
+        formData.append('note', note)
+        await store.dispatch('setCustomerAddress', formData)
+        alert('Address added!')
+        isAddressModalVisible.value = false
+      } catch (error) {
+
+      }
+    }
+  }
+
+  const selectProvince = (event) => {
+    model.value.address.province = $( `#${event.target.id} option:selected` ).text()
+  }
+
+  const selectCity = (event) => {
+    model.value.address.city = $( `#${event.target.id} option:selected` ).text()
+  }
+
+  const selectBarangay = (event) => {
+    model.value.address.barangay = $( `#${event.target.id} option:selected` ).text()
+  }
+
+  var my_handlers = {
+
+  fill_provinces:  function(){
+
+    $('#province').ph_locations('fetch_list', [{"region_code": 12}]);
+    },
+
+    fill_cities: function(){
+        var province_code = $(this).val();
+        $('#city').ph_locations( 'fetch_list', [{"province_code": province_code}]);
+    },
+
+    fill_barangays: function(){
+        var city_code = $(this).val();
+        $('#barangay').ph_locations('fetch_list', [{"city_code": city_code}]);
+    }
+  };
+
+  $(function(){
+    $('#province').on('change', my_handlers.fill_cities);
+    $('#city').on('change', my_handlers.fill_barangays);
+
+    $('#region').ph_locations({'location_type': 'regions'});
+    $('#province').ph_locations({'location_type': 'provinces'});
+    $('#city').ph_locations({'location_type': 'cities'});
+    $('#barangay').ph_locations({'location_type': 'barangays'});
+
+    $('#province').ph_locations('fetch_list');
+  });
 
 </script>
 

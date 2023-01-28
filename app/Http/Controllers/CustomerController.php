@@ -13,7 +13,7 @@ class CustomerController extends Controller
 
     private function customer()
     {
-        return Customer::where('user_id', auth()->user()->id)->first();
+        return Customer::with('address')->where('user_id', auth()->user()->id)->first();
     }
 
     public function index()
@@ -36,6 +36,34 @@ class CustomerController extends Controller
 
         return response()->json([
             'data' => $customer
+        ]);
+    }
+
+    public function storeAddress(Request $request)
+    {
+        $validated = $request->validate([
+            'country' => 'required',
+            'province' => 'required',
+            'city' => 'required',
+            'barangay' => 'required',
+            'address_line1' => 'required',
+            'zipcode' => 'required',
+            'note' => 'sometimes',
+        ]);
+
+        $customer = $this->customer();
+        $customer->address()->update([
+            'country' => ucwords(strtolower($validated['country'])),
+            'province' => ucwords(strtolower($validated['province'])),
+            'city' => ucwords(strtolower($validated['city'])),
+            'barangay' => ucwords(strtolower($validated['barangay'])),
+            'address_line1' => ucwords(strtolower($validated['address_line1'])),
+            'zipcode' => ucwords($validated['zipcode']),
+            'note' => ucwords(strtolower($validated['note'])),
+        ]);
+
+        return response()->json([
+            'data' => $this->customer()
         ]);
     }
 

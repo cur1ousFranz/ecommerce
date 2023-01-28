@@ -49,6 +49,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::controller(CustomerController::class)->group(function(){
         Route::get('/customer/details', 'index');
         Route::post('/customer/personal/details', 'store');
+        Route::post('/customer/address', 'storeAddress');
         Route::post('/customer/change/password', 'updatePassword');
 
     });

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
             $table->string('country')->nullable();
             $table->string('province')->nullable();
+            $table->string('barangay')->nullable();
             $table->string('city')->nullable();
             $table->string('address_line1')->nullable();
             $table->string('zipcode')->nullable();
