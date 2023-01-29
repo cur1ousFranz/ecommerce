@@ -50,6 +50,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/customer/details', 'index');
         Route::post('/customer/personal/details', 'store');
         Route::post('/customer/address', 'storeAddress');
+        Route::post('/customer/phone', 'storePhone');
+        Route::post('/customer/phone/verify', 'storePhoneVerify');
         Route::post('/customer/change/password', 'updatePassword');
 
     });

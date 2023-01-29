@@ -40,6 +40,16 @@ const store = createStore({
   getters: {},
   actions: {
     // CUSTOMER
+    async setVerifyPhone({commit}, formData) {
+      const res = await axiosClient.post(`/customer/phone/verify`, formData)
+      commit('setCustomerProfile', res.data)
+      return res
+    },
+    async setPhoneNumber({commit}, formData) {
+      const res = await axiosClient.post(`/customer/phone`, formData)
+      commit('setCustomerProfile', res.data)
+      return res
+    },
     async setCustomerAddress({commit}, formData) {
       const res = await axiosClient.post(`/customer/address`, formData)
       commit('setCustomerProfile', res.data)

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\User;
+use Twilio\Rest\Client;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -67,6 +69,56 @@ class CustomerController extends Controller
         ]);
     }
 
+    public function storePhone(Request $request)
+    {
+        $validated = $request->validate([
+            'phone_number' => 'required',
+        ]);
+
+
+        try {
+
+            $phoneNumber = '+63'.$validated['phone_number'];
+            $code = rand(124101, 999999);
+
+            $this->smsVerification($phoneNumber, $code);
+
+            $customer = $this->customer();
+            $customer->phone_number = $validated['phone_number'];
+            $customer->verify_code = $code;
+            $customer->verified = false;
+            $customer->save();
+
+        } catch (Exception $e) {
+            return response([
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        return response()->json([
+            'data' => $this->customer()
+        ]);
+    }
+
+    public function storePhoneVerify(Request $request)
+    {
+
+        $validated = $request->validate(['verify_code' => 'required']);
+        $customer = $this->customer();
+        if($customer->verify_code == $validated['verify_code']){
+            $customer->verified = true;
+            $customer->save();
+
+            return response()->json([
+                'data' => $this->customer()
+            ]);
+        }
+
+        return response()->json([
+            'errors' =>  ['verify_code' => ['Invalid code.']],
+        ], 401);
+    }
+
     public function updatePassword(Request $request)
     {
         $validated = $request->validate([
@@ -86,5 +138,20 @@ class CustomerController extends Controller
         return response()->json([
             'errors' =>  ['current_password' => ['Wrong password.']],
         ], 401);
+    }
+
+    public function smsVerification($mobile, $code)
+    {
+        $receiverNumber = $mobile;
+        $message = "Your verification code is: " . $code;
+
+        $account_sid = getenv("TWILIO_SID");
+        $auth_token = getenv("TWILIO_TOKEN");
+        $twilio_number = getenv("TWILIO_FROM");
+
+        $client = new Client($account_sid, $auth_token);
+        $client->messages->create($receiverNumber, [
+            'from' => $twilio_number,
+            'body' => $message]);
     }
 }

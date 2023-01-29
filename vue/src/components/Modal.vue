@@ -1,6 +1,6 @@
 <template>
     <transition name="modal-fade">
-        <div class="modal-backdrop" @click.self="closeValueModal">
+        <div class="modal-backdrop" @click.self="closeModal">
             <div class="modal">
                 <header class="modal-header text-xl text-start">
                     <slot name="header">
@@ -15,14 +15,14 @@
                 </section>
 
                 <footer class="modal-footer mt-3">
-                    <div class="flex justify-end space-x-3">
-                        <button class="px-3 py-2 border border-gray-900 text-gray-900 text-sm" type="button" @click="closeModal" >
-                            Cancel
-                        </button>
-                        <button class="px-3 py-2 bg-gray-900 text-white text-sm" type="button" @click="confirmModal">
-                            Confirm
-                        </button>
-                    </div>
+                  <div class="flex justify-end space-x-3">
+                    <button class="px-3 py-2 border border-gray-900 text-gray-900 text-sm" type="button" @click="closeModal" >
+                      Cancel
+                    </button>
+                    <button class="px-3 py-2 bg-gray-900 text-white text-sm" type="button" @click="confirmModal">
+                      Confirm
+                    </button>
+                  </div>
                 </footer>
             </div>
         </div>
@@ -61,7 +61,7 @@
         overflow-x: auto;
         display: flex;
         flex-direction: column;
-        width: 50%;
+        width: 60%;
     }
 
     .modal-header {

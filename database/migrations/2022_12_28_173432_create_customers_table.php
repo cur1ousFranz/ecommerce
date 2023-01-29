@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('gender')->nullable();
             $table->string('birth_date')->nullable();
             $table->string('phone_number')->nullable();
+            $table->integer('verify_code')->nullable();
+            $table->boolean('verified')->nullable();
             $table->timestamps();
         });
     }
