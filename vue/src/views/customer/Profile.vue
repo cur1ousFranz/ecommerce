@@ -1,7 +1,18 @@
 <template>
   <div>
     <section>
-      <div class="md:w-10/12 mx-auto py-6 flex justify-center space-x-4">
+      <div class="p-6 md:hidden">
+        <h1 class="font-semibold text-lg text-gray-800">My Profile</h1>
+        <div class="flex justify-start space-x-3">
+          <h1 @click="toggleTab('info')" :class="model.toggle.information ? 'cursor-pointer font-semibold text-gray-700 hover:underline hover:text-gray-900' : 'cursor-pointer text-gray-700 hover:underline hover:text-gray-900'">
+          Information
+          </h1>
+          <h1 @click="toggleTab('pass')" :class="model.toggle.change_password ? 'cursor-pointer font-semibold text-gray-700 hover:underline hover:text-gray-900' : 'cursor-pointer text-gray-700 hover:underline hover:text-gray-900'">
+          Change Password
+          </h1>
+        </div>
+      </div>
+      <div class="md:w-10/12 mx-auto flex justify-center md:space-x-4 md:py-6">
         <div class="hidden w-3/12 shadow-md p-3 h-fit md:block">
           <h1 class="font-semibold text-lg text-center text-gray-800">My Profile</h1>
           <div class="p-4 space-y-2">
@@ -78,7 +89,8 @@
 
             <div class="shadow-md px-6 py-4">
               <h1 class="font-semibold text-2xl text-gray-800">Address Information</h1>
-              <div v-if="model.details.customer_address.country && model.details.addressLoaded" class="border border-l-0 border-gray-300 shadow-sm w-2/3 my-3 flex space-x-4">
+              <div v-if="model.details.customer_address.country && model.details.addressLoaded"
+              class="border border-l-0 border-gray-300 shadow-sm my-3 flex space-x-4 md:w-2/3">
                 <div class="w-fit h-full space-y-2">
                   <div class="px-0.5 py-3 bg-blue-700"></div>
                   <div class="px-0.5 py-3 bg-red-600"></div>
@@ -88,8 +100,8 @@
                 </div>
                 <div class="py-2 px-3">
                   <div class="flex space-x-4">
-                    <h1 class="text-gray-800">{{ model.details.first_name }}</h1>
-                    <h1 class="text-sm text-gray-800">{{ model.details.phone_number }}</h1>
+                    <h1 class="text-gray-800">{{ model.details.first_name }} {{ model.details.last_name }}</h1>
+                    <h1 class="text-xs text-gray-800">{{ model.details.phone_number }}</h1>
                   </div>
                   <h1 class="text-sm mt-6 text-gray-800">
                     {{ model.details.customer_address.address_line1 }}
@@ -130,21 +142,21 @@
             <h1 class="text-xs text-gray-800">
               For your account's security, do not share your password with anyone else
             </h1>
-            <div class="w-1/2 pt-4">
+            <div class="pt-4 md:w-1/2">
               <label class="text-sm">Current Password</label>
               <input @keyup="enableChangePassButton" v-model="model.details.current_password" type="password" :class=" model.errors.current_password ? 'w-full py-1 border border-red-500 focus:outline-red-500 px-2' : 'w-full py-1 border px-2'"/>
               <p class="text-sm absolute text-red-500"> {{ model.errors.current_password }}</p>
             </div>
-            <div class="w-1/2 pt-4">
+            <div class="pt-4 md:w-1/2">
               <label class="text-sm">New Password</label>
               <input @keyup="enableChangePassButton" v-model="model.details.password" type="password" :class=" model.errors.password ? 'w-full py-1 border border-red-500 focus:outline-red-500 px-2' : 'w-full py-1 border px-2'"/>
               <p class="text-sm absolute text-red-500"> {{ model.errors.password }}</p>
             </div>
-            <div class="w-1/2 pt-4">
+            <div class="pt-4 md:w-1/2">
               <label class="text-sm">Confirm New Password</label>
               <input @keyup="enableChangePassButton" v-model="model.details.password_confirmation" type="password" class="w-full py-1 border px-2"/>
             </div>
-            <div class="w-1/2 flex justify-end py-2">
+            <div class="flex justify-end py-2 md:w-1/2">
               <button id="btn-change-pass" @click="changePassword" :class="model.button.disableChangePassword ? 'px-4 py-1 cursor-not-allowed bg-gray-300 text-white' :  'px-4 py-1 bg-gray-700 hover:bg-gray-900 text-white'" :disabled="model.button.disableChangePassword">Confirm</button>
             </div>
           </div>
