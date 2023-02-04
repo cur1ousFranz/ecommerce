@@ -25,7 +25,7 @@
             </h1>
           </div>
         </div>
-        <div class="w-12/12 md:w-9/12">
+        <div class="w-full px-4 md:w-9/12 md:px-0">
           <div v-if="model.toggle.information" class=" space-y-3">
             <div class="shadow-md px-6 py-4">
               <h1 class="font-semibold text-2xl text-gray-800">Personal Details</h1>

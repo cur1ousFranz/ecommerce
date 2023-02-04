@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class=" min-h-screen">
     <div class="hidden fixed right-0 -mr-28 -rotate-90 mt-56 z-10 border lg:flex">
       <div class="px-12 py-2 cursor-pointer bg-gray-800 text-white font-bold text-2xl hover:bg-gray-900 " style="letter-spacing: 2px">
         GET ₱150 OFF!
@@ -113,18 +113,19 @@
       </div>
 
     </nav>
-    <pre>{{ model.products }}</pre>
-    <main class="max-w-screen-xl mx-auto">
+
+    <main class="max-w-screen-xl mx-auto mb-12">
       <router-view></router-view>
     </main>
-
-    <!-- <Footer/> -->
+    
+    <Footer/>
   </div>
 </template>
 
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import Footer from '../../components/layout/Footer.vue'
 import store from '../../store'
 
   const router = useRouter()
