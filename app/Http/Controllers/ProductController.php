@@ -8,15 +8,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Product\CreateProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
-use Nette\Utils\Json;
-
 class ProductController extends Controller
 {
-
     public function index(Request $request)
     {
         $validated = $request->validate(['sort' => 'required', 'entry' => 'required', 'current_page' => 'required']);
-
         return response()->json([
             'data' => $this->sort($validated['sort'], $validated['entry'], $validated['current_page'])
         ]);
@@ -32,23 +28,24 @@ class ProductController extends Controller
     public function store(CreateProductRequest $request)
     {
         $validated = $request->validated();
+        
+        $imagesURL = [];
+        foreach ($validated['product_image'] as $image) {
+            $path = $image->store('product_images', 's3');
+            array_push($imagesURL, Storage::disk('s3')->url($path));
+        }
+
         $product = Product::create([
             'admin_id' => Auth::user()->id,
             'name' => $validated['name'],
             'description' => $validated['description'],
         ]);
 
-        $imageArray = [];
-        foreach ($validated['product_image'] as $image) {
-            $path = $image->store('product_images', 's3');
-            $imageArray[] = Storage::disk('s3')->url($path);
-        }
-
         $product->categories()->attach($validated['category_id']);
         $product->productItem()->create([
             'sku' => $validated['sku'],
             'qty_stock' => $validated['qty_stock'],
-            'product_image' => json_encode($imageArray),
+            'product_image' => json_encode($imagesURL),
             'price' => $validated['price'],
         ]);
 
