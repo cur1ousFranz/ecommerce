@@ -13,8 +13,8 @@
       </div>
 
       <div class="flex space-x-6 relative">
-        <div id="small-banner-bg" class="hidden  px-12 mt-2 bg-slate-100 md:block">
-          <h1 id="small-banner" class="text-end text-red-500 transition duration-500 ease-in-out">
+        <div ref="smallBannerBg" class="hidden  px-12 mt-2 bg-slate-100 md:block">
+          <h1 ref="smallBanner" class="text-end text-red-500 transition duration-500 ease-in-out">
             Free Standard Shipping!
           </h1>
         </div>
@@ -133,6 +133,8 @@ import store from '../../store'
   const showCart = ref(false)
   const alternate = ref(false)
   const authenticated = ref(false)
+  const smallBanner = ref(null)
+  const smallBannerBg = ref(null)
 
   const showDropdown = () => {
     showCart.value = false
@@ -159,11 +161,7 @@ import store from '../../store'
     (newVal, oldVal) => model.value.cart.cartData = newVal
   )
 
-  let smallBanner
-  let smallBannerBg
   onMounted(async () => {
-    smallBanner = document.querySelector('#small-banner')
-    smallBannerBg = document.querySelector('#small-banner-bg')
 
     if(localStorage.getItem('TOKEN')) {
       authenticated.value = true
@@ -177,17 +175,17 @@ import store from '../../store'
 
   setInterval(() => {
     if(alternate.value) {
-      smallBannerBg.classList.remove('bg-blue-100')
-      smallBannerBg.classList.add('bg-slate-100')
-      smallBanner.classList.remove('text-gray-700')
-      smallBanner.classList.add('text-red-500')
-      smallBanner.innerHTML = 'Free Standard Shipping!'
+      smallBannerBg.value.classList.remove('bg-blue-100')
+      smallBannerBg.value.classList.add('bg-slate-100')
+      smallBanner.value.classList.remove('text-gray-700')
+      smallBanner.value.classList.add('text-red-500')
+      smallBanner.value.innerHTML = 'Free Standard Shipping!'
     } else {
-      smallBannerBg.classList.add('bg-blue-100')
-      smallBannerBg.classList.remove('bg-slate-100')
-      smallBanner.classList.remove('text-red-500')
-      smallBanner.classList.add('text-gray-700')
-      smallBanner.innerHTML = 'Get ₱150 off Your First Order'
+      smallBannerBg.value.classList.add('bg-blue-100')
+      smallBannerBg.value.classList.remove('bg-slate-100')
+      smallBanner.value.classList.remove('text-red-500')
+      smallBanner.value.classList.add('text-gray-700')
+      smallBanner.value.innerHTML = 'Get ₱150 off Your First Order'
 
     }
     alternate.value = !alternate.value
