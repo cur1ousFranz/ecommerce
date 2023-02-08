@@ -13,6 +13,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $validated = $request->validate(['sort' => 'required', 'entry' => 'required', 'current_page' => 'required']);
+        Storage::put('test.txt', 'Helloworld');
         return response()->json([
             'data' => $this->sort($validated['sort'], $validated['entry'], $validated['current_page'])
         ]);
@@ -34,7 +35,7 @@ class ProductController extends Controller
             $path = $image->store('product_images', 's3');
             array_push($imagesURL, Storage::disk('s3')->url($path));
         }
-
+        
         $product = Product::create([
             'admin_id' => Auth::user()->id,
             'name' => $validated['name'],
