@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Product\CreateProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
+
 class ProductController extends Controller
 {
     public function index(Request $request)
@@ -31,9 +34,15 @@ class ProductController extends Controller
         $validated = $request->validated();
         
         $imagesURL = [];
+        
         foreach ($validated['product_image'] as $image) {
-            $path = $image->store('product_images', 's3');
-            array_push($imagesURL, Storage::disk('s3')->url($path));
+
+            $path = $image->store('public/images');
+    
+            // get the full public URL of the stored file
+            $imageName = Storage::url($path);
+            $fullImagePath = URL::to('/')  . $imageName;
+            array_push($imagesURL, $fullImagePath);
         }
         
         $product = Product::create([
