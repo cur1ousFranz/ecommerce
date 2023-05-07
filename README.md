@@ -2,7 +2,7 @@
 
 ## Description
 
-####  This project is inspired with SHEIN ecommerce website. Customer can add browse product specification and add them in their cart. Customer can also proceed to checkout to check products on their cart. This project was built to practice my skills in Laravel + Vuejs stack.
+####  This project is inspired with SHEIN ecommerce website. Customer can browse product specification and add them in their cart. Customer can also proceed to checkout to check products on their cart. This project was built to practice my skills in Laravel + Vuejs stack.
 
 #### Admin panel frontend repository: https://github.com/cur1ousFranz/ecommerce_admin_panel
 
@@ -95,7 +95,7 @@ npm run dev
 
 * Customer Registration, Update Profile Information (CRUD).
 * SMS Verification (API).
-* Email Verification (gmail smptp) for change password.
+* Email Verification (gmail smtp) for change password.
 * Display different products with different categories.
 * Customer can add products on cart, update cart's product as well as delete cart's product (CRUD).
 * Sorting product by differenct category combination.
